@@ -1,0 +1,38 @@
+﻿<Window x:Class="LS.SCO.Plugin.WpfDeviceSimulator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sample Controller Client" Height="450" Width="1000" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="169*"/>
+            <RowDefinition Height="157*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top section with IP and Port fields -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="10,10,10,10">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="API Address:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox x:Name="APIAddressTextBox" Width="300" Margin="0,0,20,0" ToolTip="Enter the IP address"/>
+            </StackPanel>
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal" >
+                <Button x:Name="GetItemDetailsBtn" Content="Get Item Details" Click="GetItemDetails_Click" Margin="5" ToolTip="Fetch item details"/>
+                <Button x:Name="AddItemToTransBtn" Content="Add Item to Transaction" Click="AddItemToTransaction_Click" Margin="5" ToolTip="Add item to the current transaction"/>
+                <Button x:Name="CreateTransactionBtn" Content="Create Transaction" Click="CreateTransaction_Click" Margin="5" ToolTip="Start a new transaction"/>
+                <Button x:Name="GetCurrTransactionBtn" Content="Get Curr Transaction" Click="GetCurrentTransaction_Click" Margin="5" ToolTip="Fetch details of the current transaction"/>
+                <Button x:Name="PayCashBtn" Content="Pay cash" Click="PayCash_Click" Margin="5" ToolTip="Pay cash"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="PayCurrTransactionBtn" Content="Pay Curr Transaction" Click="PayCurrentTransaction_Click" Margin="5" ToolTip="Pay for the current transaction"/>
+                <Button x:Name="FinishCurrTransactionBtn" Content="Finish Curr Transaction" Click="FinishCurrentTransaction_Click" Margin="5" ToolTip="Complete the current transaction"/>
+                <Button x:Name="VoidTransactionBtn" Content="Void Transaction" Click="VoidTransaction_Click" Margin="5" ToolTip="Voids the current transaction"/>
+                <Button x:Name="CancelActiveTransactionBtn" Content="Cancel Active Transaction" Click="CancelActiveTransaction_Click" Margin="5" ToolTip="Cancels the active transaction"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Result display -->
+        <TextBox x:Name="ResultTextBox" Grid.Row="1" Margin="10,10,10,10" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" ToolTip="Output results will be displayed here" Grid.RowSpan="2"/>
+    </Grid>
+</Window>

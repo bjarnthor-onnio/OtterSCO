@@ -1,0 +1,87 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Teting\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\teting\\ls.sco.plugin.adapter\\otter\\messagehandlers\\producthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\producthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\teting\\ls.sco.plugin.adapter\\otter\\messagehandlers\\dataneededhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\dataneededhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\teting\\ls.sco.plugin.adapter\\adapters\\sampleposadapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\adapters\\sampleposadapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|c:\\teting\\ls.sco.plugin.service\\services\\sampleposservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|solutionrelative:ls.sco.plugin.service\\services\\sampleposservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DataNeededHandler.cs",
+              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
+              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
+              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
+              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAYwDQAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-13T15:40:08.895Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductHandler.cs",
+              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
+              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
+              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
+              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
+              "ViewState": "AgIAANIAAAAAAAAAAAAYwNoAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T09:06:21.494Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SamplePosAdapter.cs",
+              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
+              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
+              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
+              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
+              "ViewState": "AgIAACABAAAAAAAAAAAwwEMBAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T08:40:09.946Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SamplePosService.cs",
+              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
+              "RelativeDocumentMoniker": "LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
+              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
+              "RelativeToolTip": "LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T08:39:57.735Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
