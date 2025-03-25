@@ -11,6 +11,8 @@ namespace Onnio.PaymentService.Interfaces
     {
         public INetgiroPaymentService NetgiroPaymentService { get; }
         public IPeiPaymentService PeiPaymentService { get; }
+        public IAppPaymentService AppPaymentService { get; }
+        public ILeikbreytirPaymentService LeikbreytirPaymentService { get; }
 
         Task<object> ProcessPaymentAsync(PaymentRequestDto request);
     }

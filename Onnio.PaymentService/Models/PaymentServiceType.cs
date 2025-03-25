@@ -9,6 +9,8 @@ namespace Onnio.PaymentService.Models
     public enum PaymentServiceType
     {
         Netgiro,
-        Pei
+        Pei,
+        App,
+        Leikbreytir
     }
 }

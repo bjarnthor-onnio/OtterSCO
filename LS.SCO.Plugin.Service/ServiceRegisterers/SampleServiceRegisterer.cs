@@ -12,6 +12,7 @@ using LS.SCO.Plugin.Service.Validation;
 using LS.SCO.Services.ServiceRegisterers;
 using LS.SCO.WorkerService;
 using Microsoft.Extensions.DependencyInjection;
+using Onnio.ConfigService.Extensions;
 using Onnio.PaymentService.Extensions;
 
 
@@ -39,7 +40,7 @@ namespace LS.SCO.Plugin.Service.ServiceRegisterers
 
         public override void RegisterServices(IServiceCollection services = null)
         {
-            Thread.Sleep(5000);
+            //Thread.Sleep(10000);
             base.RegisterServices(services);
 
             services.AddSingleton<ISamplePosService, SamplePosService>();
@@ -51,6 +52,10 @@ namespace LS.SCO.Plugin.Service.ServiceRegisterers
             services?.AddHostedService<BaseStarterService>();
             services.AddHttpClient();
             services.AddPaymentServices();
+            services.AddConfigurationService(options =>
+            {
+                options.ConfigBasePath = "C:\\ProgramData\\LS Retail\\LS Self-Checkout Connector\\Plugins";
+            });
         }
 
         public override void CleanUpServices(IServiceCollection services)

@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Onnio.PaymentService.Models.Netgiro
 {
     public class NetgiroParameters
     {
-        public string BaseUrl { get; set; }
-        public string AppKey { get; set; }
-        public string Secret { get; set; }
+        [JsonProperty("BaseUrl")]
+        public string BaseUrl { get; set; } = "";
+
+        [JsonProperty("AppKey")]
+        public string AppKey { get; set; } = "";
+
+        [JsonProperty("Secret")]
+        public string Secret { get; set; } = "";
     }
 }

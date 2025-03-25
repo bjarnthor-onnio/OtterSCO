@@ -47,7 +47,7 @@ namespace LS.SCO.Plugin.Adapter.Controllers
         [HttpPost("payForCurrentTransactionExternal")]
         public async ValueTask<IActionResult> PayForCurrentTransactionExternal([FromBody] PayForCurrentTransactionInput input)
         {
-            var result = await this._samplePosAdapter.PayForCurrentTransactionExternal(input.Value, input.TenderType, input.CustomerId);
+            var result = await this._samplePosAdapter.PayForCurrentTransactionExternal(input.TenderType);
 
             return this.ValidateResult(result);
         }
@@ -55,7 +55,7 @@ namespace LS.SCO.Plugin.Adapter.Controllers
         [HttpPost("addItem")]
         public async ValueTask<IActionResult> AddItemToTransaction([FromBody] GetItemDetailsInput tem)
         {
-            var result = await this._samplePosAdapter.AddItemToTransaction(tem.ItemId,"");
+            var result = await this._samplePosAdapter.AddItemToTransaction(tem.BarCode,tem.ItemId,"");
 
             return this.ValidateResult(result);
         }

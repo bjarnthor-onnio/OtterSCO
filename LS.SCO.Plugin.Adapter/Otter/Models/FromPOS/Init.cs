@@ -18,5 +18,6 @@ namespace LS.SCO.Plugin.Adapter.Otter.Models.FromPOS
         public string laneNumber { get; set; }
         public string storeNumber { get; set; }
         public string posVersion { get; set; }
+        public string posId { get; set; }
     }
 }

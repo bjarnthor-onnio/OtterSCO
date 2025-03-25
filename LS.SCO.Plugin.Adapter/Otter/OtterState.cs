@@ -28,6 +28,7 @@ namespace LS.SCO.Plugin.Adapter.Otter
         public string? Api_MessageId_Payment { get; set; } 
         public string? Api_Active_Payment_Method { get; set; } = String.Empty;
         public string? Pos_TransactionId { get; set; } = null;
+        public string? Pos_LastTransactionId { get; set; } = null;
         public decimal? Pos_BalanceAmount { get; set; } = null;
         public decimal? Pos_TotalAmount { get; set; } = null;
         public void Reset()

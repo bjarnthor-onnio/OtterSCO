@@ -17,20 +17,6 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             var msg = (Otter.Models.FromSCO.product)message;
             _otterState.Api_MessageId_Product = msg.id;
 
-            if (string.IsNullOrEmpty(_otterState.Pos_TransactionId))
-            {
-                var _currTransaction = await _adapter.GetCurrentTransaction();
-                if (_currTransaction.Transaction != null && _currTransaction.Transaction.TransactionId != null)
-                {
-                    _otterState.Pos_TransactionId = _currTransaction.Transaction.ReceiptId;
-                }
-            }
-
-            if (string.IsNullOrEmpty(_otterState.Pos_TransactionId))
-            {
-                await _adapter.StartTransactionAsync();
-            }
-
             var input = new GetItemDetailsInputDto();
 
             input.ConfigureBaseInputProperties(_adapter);
@@ -41,17 +27,10 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
             if (itemDetails.ErrorList?.Count() > 0)
             {
-                if (itemDetails.ErrorList.First().ErrorMessage == "Error Code: 2002 - Coupon")
-                {
-                    isCoupon = true;
-                }
-                else
-                {
-                    Console.WriteLine("################   ERROR DURING PRODUCT");
-                    //TODO check error code and map to reponse
-                    _otterProtocolHandler.SendMessage(OtterMessages.ProductError(_otterState.Api_MessageId_Product, itemDetails.ErrorList.First().ErrorMessage));
-                    return;
-                }
+                Console.WriteLine("################   ERROR DURING PRODUCT");
+                //TODO check error code and map to reponse
+                _otterProtocolHandler.SendMessage(OtterMessages.ProductError(_otterState.Api_MessageId_Product, itemDetails.ErrorList.First().ErrorMessage));
+                return;
             }
             if (!isCoupon)
             {
@@ -98,7 +77,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 }
 
                 //Check if weight is required
-                if (itemDetails.WeighingRequired && msg.@params.weight == null)
+                if (itemDetails.ScaleItem && msg.@params.weight == null)
                 {
                     _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.product
                     {
@@ -168,7 +147,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             decimal weight = msg.@params.weight > 0 ? (decimal)msg.@params.weight : 0;
 
             //Add item to transaction
-            decimal qty = itemDetails.WeighingRequired ? (weight / 1000) : 1;
+            decimal qty = itemDetails.ScaleItem ? (weight / 1000) : 1;
 
             int ageLimit = 0;
             int.TryParse(itemDetails.FeatureFlags?.Find(x => x.Flag == "AgeLimit")?.Value, out ageLimit);
@@ -183,11 +162,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
             Console.WriteLine("################   SECURITY MODE: " + securityMode);
 
-            // TODO - call LsCentral web service directly for extra features
-            // var clnt = new LsClient();
-            // clnt.AddToTransAsync(msg.@params.barcode, qty);
 
-            var addItem = _adapter.AddItemToTransaction(msg.@params.barcode, _otterState.Pos_TransactionId, qty).Result;
+            var addItem = _adapter.AddItemToTransaction(itemDetails.BarCode, itemDetails.ItemNo, _otterState.Pos_TransactionId, qty).Result;
             bool discountAdded = false;
             if (addItem.ErrorList?.Count() > 0)
             {
@@ -211,10 +187,23 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         discountText = saleItem.PeriodicDiscountDescription
                     });
                 }
+                if (saleItem.PriceReductions.Count > 0)
+                {
+                    discountAdded = true;
+                    foreach (var discount in saleItem.PriceReductions)
+                    {
+                        productDiscounts.Add(new Discounts()
+                        {
+                            discountAmount = (int)discount.Amount * 100,
+                            discountText = discount.PromotionText
+                        });
+                    }
+                }
+
                 product p = new product();
                 p.result = new Otter.Models.FromPOS.ProductResult();
 
-                p.result.barcode = itemDetails.ItemId;
+                p.result.barcode = itemDetails.BarCode;
                 p.result.productId = saleItem.LineNr;
                 p.result.linkedProductId = null;                                    //TODO - NEED SOLUTION - feature flag??
                 p.result.name = saleItem.Description;
@@ -234,7 +223,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
                 if (discountAdded)
                 {
-                    var discountItems = addItem.Transaction.SaleItems.Where(x => (x.HasLineDiscount || x.HasPeriodicDiscount) && x.LineNr != saleItem.LineNr);
+                    var discountItems = addItem.Transaction.SaleItems.Where(x => (x.HasLineDiscount || x.HasPeriodicDiscount || x.PriceReductions.Count > 0) && x.LineNr != saleItem.LineNr);
                     foreach (var item in discountItems)
                     {
                         addProduct addProduct = new addProduct();
@@ -248,12 +237,21 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         addProduct.@params.price = (int)item.PriceWithTax * 100;
                         addProduct.@params.totalPrice = (int)((saleItem.NetAmount + saleItem.TaxAmount) * 100);
                         addProduct.@params.discount = new List<Otter.Models.FromPOS.Discount_addProduct>();
-                        addProduct.@params.barcode = itemDetails.ItemId;
+                        addProduct.@params.barcode = itemDetails.BarCode;
                         addProduct.@params.discount.Add(new Otter.Models.FromPOS.Discount_addProduct()
                         {
                             discountAmount = (int)item.PeriodicDiscountAmount * 100,
                             discountText = item.PeriodicDiscountDescription
                         });
+                        if (item.PriceReductions.Count > 0)
+                        {
+                            var discount = saleItem.PriceReductions.First();
+                            addProduct.@params.discount.Add(new Otter.Models.FromPOS.Discount_addProduct()
+                            {
+                                discountAmount = Math.Abs((int)discount.Amount * 100),
+                                discountText = discount.PromotionText
+                            });
+                        }
                         addProduct.id = _otterState.Api_MessageId_Product;
                         _otterProtocolHandler.SendMessage(addProduct);
 

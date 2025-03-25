@@ -1,7 +1,11 @@
 ﻿using LS.SCO.Interfaces.Log;
 using LS.SCO.Plugin.Adapter.Otter.Models;
+using Onnio.ConfigService.Interface;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
+using Onnio.ConfigService.Models;
 
 namespace LS.SCO.Plugin.Adapter.Otter
 {
@@ -24,9 +28,10 @@ namespace LS.SCO.Plugin.Adapter.Otter
         public bool isConnected = false;
 
         const string MessagePattern = @"([\s\S]*?){([\s\S]*?)jsonrpc([\s\S]*?)method(([\s\S]*?)(params|result)([\s\S]*?){([\s\S]*?)}([\s\S]*?)?)([\s\S]*?)}";
-
-        public OtterProtocolHandler(ILogManager logService, ILogManager logManager)
+        private readonly IConfigurationService _configService;
+        public OtterProtocolHandler(ILogManager logService, ILogManager logManager, IConfigurationService configService)
         {
+            _configService = configService;
             this._logService = logService;
             //this._configuration = configuration;
             this._logManager = logManager;
@@ -51,13 +56,12 @@ namespace LS.SCO.Plugin.Adapter.Otter
 
 
 
-        #region TCP CLIENT EVENTS
         private void Connected()
         {
             isConnected = true;
-
-            StartInitialization(OtterMessages.InitMessage());
-
+            //TODO: PosId is retreived from config for now
+            var otterConfig = _configService.GetConfigurationAsync<OtterConfig>("Config", "OtterConfig").Result;
+            StartInitialization(OtterMessages.InitMessage(otterConfig.PosId));
         }
         private void SocketDisconnected()
         {
@@ -103,10 +107,6 @@ namespace LS.SCO.Plugin.Adapter.Otter
             return match.Success;
         }
         #endregion
-
-
-        #endregion
-
 
         public void StartInitialization(Models.FromPOS.Init initializeMsg)
         {

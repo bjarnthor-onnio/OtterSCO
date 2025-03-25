@@ -30,6 +30,9 @@ using LS.SCO.Entity.DTO.SCOService.VoidItem;
 using Onnio.PaymentService.Models;
 using LS.SCO.Entity.ErrorManagement;
 using LS.SCO.Entity.Base;
+using Onnio.PaymentService.Services;
+using Onnio.ConfigService.Interface;
+using LS.SCO.Entity.DTO.SCOService.PrintPreviousTransaction;
 
 namespace LS.SCO.Plugin.Adapter.Adapters
 {
@@ -50,6 +53,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         private readonly ILogManager _logManager;
         private readonly IServiceProvider _services;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfigurationService _configService;
 
         public List<BaseAdapterConfiguration> AdapterConfiguration { get; set; } = new List<BaseAdapterConfiguration>();
 
@@ -82,7 +86,8 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             IServiceConfigurationManager configuration,
             ILogManager logManager,
             IServiceProvider services,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            IConfigurationService configService)
         {
             this._mapper = mapper;
             this._logService = logService;
@@ -94,7 +99,9 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             this._posService = (ISamplePosServiceDisabled)this._services.GetService<ISamplePosService>();
             this._httpClientFactory = httpClientFactory;
 
+
             this._cancellationTokenSource = new CancellationTokenSource();
+            _configService = configService;
         }
 
         /// <summary>
@@ -203,7 +210,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             if (startTransactionResult.IsValid())
                 _logService.LogInfo(message: $"Success, TransactionId : {startTransactionResult.Transaction?.TransactionId}");
-            
+
             else
                 _logService.LogError(errorMessages: startTransactionResult.ErrorList);
 
@@ -231,15 +238,17 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        public async Task<AddToTransOutputDto> AddItemToTransaction(string itemId, string receiptId, decimal quantity = 1 )
+        public async Task<AddToTransOutputDto> AddItemToTransaction(string barCode, string itemId, string receiptId = "", decimal qty = 0)
         {
-            var input = new AddToTransInputDto { Data = new AddToTransInputDataDto { Id = itemId, Quantity = quantity } };
+            var input = new AddToTransInputDto { Data = new AddToTransInputDataDto { } };
+            input.Data.Code = barCode;
             input.Data.TransactionId = receiptId;
+            input.Data.Id = itemId;
+            input.Data.Quantity = qty;
 
             input.ConfigureBaseInputProperties(this);
             input.Data.EntryMethod = "";
-            //var result = await this._posService.AddItemAsync(input);
-            var result = this._posService.AddItemAsync(input).Result;
+            var result = await this._posService.AddItemAsync(input);
 
             if (result != null && result.Result == "IFC_OK")
             {
@@ -272,55 +281,87 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             return result;
         }
-        public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(decimal amount, string tenderType, string customerId)
+        public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, string customerId = "", bool skipPaymentLine = true)
         {
             EFTRequestOutputDto sessionResult = null;
             GetCurrentTransactionOutputDto currentTransaction = await GetCurrentTransaction();
-             
+
             TerminalId = currentTransaction.Transaction.TerminalId;
 
             PaymentRequestDto request = new PaymentRequestDto
             {
-                //Amount = (int) currentTransaction.Transaction.BalanceAmount,
-                Amount = 100,
+                CurrencyCode = "ISK",
+                Amount = (int)currentTransaction.Transaction.BalanceAmountWithTax,
                 Reference = "Vörur",
                 CustomerId = customerId,
+                ReceiptId = currentTransaction.Transaction.ReceiptId,
+                TenderTypeId = tenderType
 
             };
 
+            //TODO: handle different payment services better
+            //Create a swithc case for the different payment services
+            
+            if (tenderType == "23")
+            {
+                request.paymentService = PaymentServiceType.App;
+            }
+            if (tenderType == "40")
+            {
+                request.paymentService = PaymentServiceType.Leikbreytir;
+            }
+            if(tenderType == "18")
+            {
+                request.paymentService = PaymentServiceType.Netgiro;
+            }
+
+
             var result = _posService.ProcessExternalPayment(request);
+
+
             AddToTransOutputDto output = new AddToTransOutputDto();
             output.ConfigureBaseInputProperties(this);
+
+            //Todo: This is shit, make better code you bastard.
             if (!result.Success)
             {
                 Error error = new Error();
                 error.ErrorMessage = result.Message;
                 List<Error> errorEnumerable = new List<Error>();
                 errorEnumerable.Add(error);
+
                 output.ErrorList = errorEnumerable;
                 return output;
             }
-                
-            var input = new EFTRequestInputDto(EFTRequestType.Purchase)
+
+
+            if (!skipPaymentLine)
             {
-                AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
+                var input = new EFTRequestInputDto(EFTRequestType.Purchase)
                 {
-                    TotalAmount = amount//Convert.ToDecimal(amount) / 100,
+                    AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
+                    {
+                        TotalAmount = currentTransaction.Transaction.BalanceAmountWithTax//Convert.ToDecimal(amount) / 100,
 
-                },
-                TenderType = tenderType
-            };
-            input.ConfigureBaseInputProperties(this);
+                    },
+                    TenderType = tenderType
+                };
+                input.ConfigureBaseInputProperties(this);
 
-            var addTenderOutput = await AddPaymentLineToTransaction(tenderType, input);
+                var addTenderOutput = await AddPaymentLineToTransaction(tenderType, input);
 
-            if (!addTenderOutput.IsValid())
-            {
-                output.ErrorList = output.ErrorList.Concat(addTenderOutput.ErrorList).ToList();
-                return output;
+                if (!addTenderOutput.IsValid())
+                {
+                    output.ErrorList = output.ErrorList.Concat(addTenderOutput.ErrorList).ToList();
+                    return output;
+                }
+
+                return addTenderOutput;
+
             }
-            return addTenderOutput;
-            
+            output.Success = true;
+            return output;
+
         }
 
         /// <summary>
@@ -329,23 +370,23 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         /// <returns></returns>
         public async Task<EFTRequestOutputDto> PayForCurrentTransaction(decimal amount, string tenderType)
         {
-            
+
             EFTRequestOutputDto sessionResult = null;
             try
             {
                 //This is not supported for our EFT devices. Might have to include it in the future.
-                /* 
-                sessionResult = await DoPaymentSessions(EFTRequestType.StartSession);
-                if (!sessionResult.IsValid())
-                {
-                    _logService.LogInfo(message: $"A session could not be started, status and result set");
 
-                    //Make sure FinishSession is not called in the try/Finally 
-                    sessionResult = null;
+                //sessionResult = await DoPaymentSessions(EFTRequestType.StartSession);
+                //if (!sessionResult.IsValid())
+                //{
+                //    _logService.LogInfo(message: $"A session could not be started, status and result set");
 
-                    return sessionResult;
-                }
-                */
+                //    //Make sure FinishSession is not called in the try/Finally 
+                //    sessionResult = null;
+
+                //    return sessionResult;
+                //}
+
                 var input = new EFTRequestInputDto(EFTRequestType.Purchase)
                 {
                     AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
@@ -364,7 +405,21 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                 _logService.LogInfo(message: $"ResultCode: {purchaseResult.ResultCode} - VerificationMethod: {purchaseResult.VerificationMethod}");
 
                 if (!CanAddPaymentLineToTransaction(purchaseResult))
+                {
+                    if (purchaseResult.AuthorizationStatus == AuthorizationStatus.Declined)
+                    {
+                        purchaseResult.AddError(0, "Ekki heimilað", ErrorType.ExternalService);
+                    }
+                    if (purchaseResult.AuthorizationStatus == AuthorizationStatus.UserRejected)
+                    {
+                        purchaseResult.AddError(0, "Notandi hætti við", ErrorType.ExternalService);
+                    }
+                    if (purchaseResult.AuthorizationStatus == AuthorizationStatus.Cancelled)
+                    {
+                        purchaseResult.AddError(0, "Hætt við færslu", ErrorType.ExternalService);
+                    }
                     return purchaseResult;
+                }
 
                 var addTenderOutput = await AddPaymentLineToTransaction(tenderType, input);
 
@@ -377,7 +432,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
                 var setCardEntryInput = CreateSetCardEntryInputDto(purchaseResult);
                 setCardEntryInput.ReceiptID = input.Connection.RetailTransaction.ReceiptId;
-                
+
                 var cardEntryOutput = await _posService.SetCardEntryAsync(setCardEntryInput);
 
                 if (!cardEntryOutput.IsValid())
@@ -391,14 +446,14 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             }
             finally
             {
-               /* if (sessionResult != null)
+                if (sessionResult != null)
                 {
                     sessionResult = await DoPaymentSessions(EFTRequestType.FinishSession);
                     //Currently we don't care if the FinishSession didn't work once the payment has gone through
                 }
 
                 if (this._cancellationTokenSource?.Token.IsCancellationRequested ?? false)
-                    this._cancellationTokenSource.TryReset();*/
+                    this._cancellationTokenSource.TryReset();
             }
         }
         public async Task<PreparePaymentOutputDto> PreparePaymentAsync()
@@ -469,7 +524,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             input.Data = new AddToTransInputDataDto();
             input.Data.LineNo = lineNo;
             input.Data.Id = itemCode;
-            
+
             var result = await _posService.VoidItemAsync(input);
             if (result.IsValid())
             {
@@ -527,9 +582,21 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             input.StaffId = operatorId;
             input.StaffID = operatorId;
             input.Password = password;
-            //_logService.LogDebug(null, $"Operator key: Value {operatonValidation.@params.key}");
+          
             var res = _posService.StaffLogonAsync(input).Result;
             return res;
-        }   
+        }
+        public bool LobicoTrigger(string receptId)
+        {
+            return _posService.TriggerLobicoEvent(receptId);
+
+        }
+        public async void PrintPreviousTrans(string transactionId)
+        {
+            var input = new PrintPreviousTranInputDto();
+            input.ConfigureBaseInputProperties(this);
+            input.TransactionId = 0;
+            var response = await _posService.PrintPreviousTransactionAsync(input);
+        }
     }
 }

@@ -4,8 +4,9 @@ namespace LS.SCO.Plugin.Adapter.Otter
     public static class OtterMessages
     {
 
-        public static Models.FromPOS.Init InitMessage(string lane = "auto",string store = "auto", string posVersion = "auto")
+        public static Models.FromPOS.Init InitMessage(string posId="",string lane = "auto",string store = "auto", string posVersion = "auto")
         {
+            
             return
                 new Models.FromPOS.Init
                     {
@@ -16,6 +17,7 @@ namespace LS.SCO.Plugin.Adapter.Otter
                             laneNumber = lane,
                             storeNumber = store,
                             posVersion = posVersion,
+                            posId = posId
                         },
                         id = Guid.NewGuid().ToString()
                     };

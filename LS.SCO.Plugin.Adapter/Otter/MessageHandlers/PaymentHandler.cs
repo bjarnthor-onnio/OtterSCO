@@ -2,41 +2,59 @@
 using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Otter.Models;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
+using Onnio.PaymentService.Services;
 
 namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 {
     internal class PaymentHandler : MessageHandler
     {
-        public PaymentHandler(OtterState otterState, OtterProtocolHandler otterProtocolHandler, OtterEventsManager manager, 
-            SamplePosAdapter samplePosAdapter) : base(otterState, otterProtocolHandler, manager, samplePosAdapter){}
+        public PaymentHandler(OtterState otterState, OtterProtocolHandler otterProtocolHandler, OtterEventsManager manager,
+            SamplePosAdapter samplePosAdapter) : base(otterState, otterProtocolHandler, manager, samplePosAdapter) { }
 
         public async override void Handle(object message)
         {
             var msg = (Otter.Models.FromSCO.payment)message;
-            _otterState.Api_MessageId_Payment = msg.id;
-
-            if (msg.@params.amount == 0)
+            _otterState.Api_MessageId = msg.id;
+            if (_otterState.Pos_BalanceAmount == 0)
             {
+                _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                {
+                    result = new paymentResult
+                    {
+                        successful = true,
+                        amount = 0
+                    },
+                    id = _otterState.Api_MessageId
+                });
+                _otterState.Api_MessageId = null;
                 var postOutput = await _adapter.FinishTransactionAsync();
                 if (postOutput.ErrorList?.Count() > 0)
                 {
                     Console.WriteLine("################   ERROR DURING Post Transaction");
+                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                    {
+                        result = new paymentResult
+                        {
+                            successful = false,
+                            message = "Ekki tókst að klára færslu, vinsamlega hafið samband við þjónustuborð."
+                        },
+                        id = _otterState.Api_MessageId
+                    });
                 }
                 else
                 {
-
                     _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
                     {
                         result = new paymentResult
                         {
                             successful = true,
+                            amount = (int)_otterState.Pos_BalanceAmount * 100
                         },
                         id = _otterState.Api_MessageId
                     });
                     _otterState.Api_MessageId = null;
 
                     _otterEventsManager.sendTransactionFinish();
-
                 }
             }
 
@@ -56,71 +74,76 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     result = new paymentResult
                     {
                         successful = false,
-                        message = "Failed to Prepare Payment at LS Central"
+                        message = "Ekki tókst að hefja greiðslu, vinsamlega hafið samband við þjónustuborð."
                     },
                     id = _otterState.Api_MessageId
                 });
                 _otterState.Api_MessageId = null;
                 return;
             }
-            
-
-            //_logService.MethodStart("Payment starts");
-
-            _otterState.Api_MessageId = msg.id;
-
-            //todo send clear screen
-            //TODO for testing purposes we empty transaction, need to check if paid full amount
-
-            //var _currTransaction = await _adapter.GetCurrentTransaction();
-
 
             var pay = _adapter.PayForCurrentTransaction((long)_otterState.Pos_BalanceAmount, msg.@params.type).Result;
 
             if (pay.ErrorList?.Count() > 0)
             {
                 Console.WriteLine("################   ERROR DURING Send EFT request");
+                _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                {
+                    result = new paymentResult
+                    {
+                        successful = false,
+                        message = pay.ErrorList.First().ErrorMessage
+                    },
+                    id = _otterState.Api_MessageId
+                });
             }
             else
             {
                 //Payment successfull
                 //TODO check if whole amount was paid
-
                 var postOutput = await _adapter.FinishTransactionAsync();
-
 
                 if (postOutput.ErrorList?.Count() > 0)
                 {
                     Console.WriteLine("################   ERROR DURING Post Transaction");
+                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                    {
+                        result = new paymentResult
+                        {
+                            successful = false,
+                            message = "Ekki tókst að klára færslu, vinsamlega hafið samband við þjónustuborð."
+                        },
+                        id = _otterState.Api_MessageId
+                    });
                 }
                 else
                 {
-
                     _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
                     {
                         result = new paymentResult
                         {
                             successful = true,
+                            amount = (int)_otterState.Pos_BalanceAmount * 100
                         },
                         id = _otterState.Api_MessageId
                     });
                     _otterState.Api_MessageId = null;
 
                     _otterEventsManager.sendTransactionFinish();
-
                 }
             }
         }
-        private void ExternalPayments(Message message)
+        private async void ExternalPayments(Message message)
         {
             var msg = (Otter.Models.FromSCO.payment)message;
-            if (msg.@params.type == "netgiro")
+
+            if (msg.@params.type == "18")
             {
 
                 var dataNeeded = new dataNeeded();
                 dataNeeded.@params = new dataNeededParams();
                 dataNeeded.@params.operatorMode = false;
-                dataNeeded.@params.titleText = "Netgiro";
+                dataNeeded.@params.titleText = "Netgíró";
                 dataNeeded.@params.instructionsText = "Sláðu inn símanúmer";
                 dataNeeded.@params.keyPad = true;
                 dataNeeded.@params.deviceError = false;
@@ -130,9 +153,10 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params.exitButton = 1;
 
                 dataNeeded.id = Guid.NewGuid().ToString();
-                _otterState.Api_MessageId = message.id;
-                _otterState.Api_Active_Payment_Method = "Netgiro";
+                _otterState.Api_MessageId_Payment = dataNeeded.id;
+                _otterState.Api_Active_Payment_Method = msg.@params.type;
                 _otterProtocolHandler.SendMessage(dataNeeded);
+
                 return;
             }
             if (msg.@params.type == "pei")
@@ -150,14 +174,106 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
                 dataNeeded.id = Guid.NewGuid().ToString();
                 _otterState.Api_MessageId_Payment = dataNeeded.id;
-                _otterState.Api_MessageId = message.id;
                 _otterState.Api_Active_Payment_Method = "Pei";
                 _otterProtocolHandler.SendMessage(dataNeeded);
+
                 return;
             }
-            if (msg.@params.type == "")
-            {                 
-                //TODO - handle 
+            if (msg.@params.type == "40")
+            {
+                var dataNeeded = new dataNeeded();
+                dataNeeded.@params = new dataNeededParams();
+                dataNeeded.@params.operatorMode = false;
+                dataNeeded.@params.titleText = "Gjafakort";
+                dataNeeded.@params.instructionsText = "Skannaðu strikamerki";
+                dataNeeded.@params.keyPad = false;
+                dataNeeded.@params.deviceError = false;
+                dataNeeded.@params.minimalInputLength = 6;
+                dataNeeded.@params.exitButton = 1;
+                dataNeeded.@params.scannerEnabled = true;
+
+                dataNeeded.id = Guid.NewGuid().ToString();
+                _otterState.Api_MessageId_Payment = dataNeeded.id;
+                _otterState.Api_Active_Payment_Method = "40";
+                _otterProtocolHandler.SendMessage(dataNeeded);
+
+                return;
+            }
+            if (msg.@params.type == "23")
+            {
+
+                var result = _adapter.PayForCurrentTransactionExternal("23").Result;
+                if (result.Success)
+                {
+                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                    {
+                        result = new paymentResult
+                        {
+                            successful = true,
+                        },
+                        id = _otterState.Api_MessageId
+                    });
+
+                    var postOutput = await _adapter.FinishTransactionAsync();
+
+
+                    if (postOutput.ErrorList?.Count() > 0)
+                    {
+                        Console.WriteLine("################   ERROR DURING Post Transaction");
+                        _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                        {
+                            result = new paymentResult
+                            {
+                                successful = false,
+                                message = "Failed to Post Transaction at LS Central"
+                            },
+                            id = _otterState.Api_MessageId
+                        });
+                    }
+                    else
+                    {
+
+                        _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                        {
+                            result = new paymentResult
+                            {
+                                successful = true,
+                            },
+                            id = _otterState.Api_MessageId
+                        });
+                        _otterState.Api_MessageId = null;
+
+                        _otterEventsManager.sendTransactionFinish();
+
+                    }
+                    return;
+
+                }
+                else
+                {
+                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                    {
+                        result = new paymentResult
+                        {
+                            successful = false,
+                            message = result.ErrorList.First().ErrorMessage
+                        },
+                        id = _otterState.Api_MessageId
+                    });
+                }
+
+            }
+            else
+            {
+                _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                {
+                    result = new paymentResult
+                    {
+                        successful = false,
+                        message = $"Payment method not supported, check central cofiguration. Data received: {msg.@params.type}"
+                    },
+                    id = _otterState.Api_MessageId
+                });
             }
         }
     }

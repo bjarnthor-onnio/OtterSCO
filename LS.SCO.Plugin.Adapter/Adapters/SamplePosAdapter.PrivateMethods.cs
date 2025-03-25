@@ -118,7 +118,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             tenderInput.CopyBaseIdentification(input);
             
-            var tenderOutput = await _posService.AddTenderAsync(tenderInput);
+            var tenderOutput =  _posService.AddTenderAsync(tenderInput).Result;
 
             return tenderOutput;
         }

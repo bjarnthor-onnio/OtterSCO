@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onnio.PaymentService", "Onn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onnio.BcIntegrator", "Onnio.BcIntegrator\Onnio.BcIntegrator.csproj", "{B83AD80C-BFC0-46FB-8B7F-CC152E29A031}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onnio.ConfigurationService", "Onnio.ConfigService\Onnio.ConfigurationService.csproj", "{960B32A8-6B08-4229-B952-D4EB06E4CD64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onnio.LoggingService", "Onnio.LoggingService\Onnio.LoggingService.csproj", "{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{B83AD80C-BFC0-46FB-8B7F-CC152E29A031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B83AD80C-BFC0-46FB-8B7F-CC152E29A031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B83AD80C-BFC0-46FB-8B7F-CC152E29A031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{960B32A8-6B08-4229-B952-D4EB06E4CD64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{960B32A8-6B08-4229-B952-D4EB06E4CD64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{960B32A8-6B08-4229-B952-D4EB06E4CD64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{960B32A8-6B08-4229-B952-D4EB06E4CD64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -86,7 +86,7 @@ namespace LS.SCO.Plugin.WpfDeviceSimulator
             {
                 var itemDetails = new GetItemDetailsInput
                 {
-                    ItemId = "10095"
+                    BarCode = "10095"
                 };
 
                 var body = JsonConvert.SerializeObject(itemDetails);

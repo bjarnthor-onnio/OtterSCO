@@ -48,6 +48,7 @@ namespace LS.SCO.Plugin.Service.ConfigurationManager
                 Token = _configuration.GetValue<string>(nameof(Settings.Token)),
                 StoreId = _configuration.GetValue<string>(nameof(Settings.StoreId)),
                 TerminalId = _configuration.GetValue<string>(nameof(Settings.TerminalId)),
+               
             };
 
             return terminalSettings;

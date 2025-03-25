@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Onnio.ConfigService.Interface;
 using Onnio.PaymentService.Extensions;
 using Onnio.PaymentService.Interfaces;
 using Onnio.PaymentService.Models;
@@ -18,9 +19,10 @@ namespace Onnio.PaymentService.Services
     public class NetgiroPaymentService : INetgiroPaymentService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-
-        public NetgiroPaymentService(IHttpClientFactory httpClientFactory)
+        private readonly IConfigurationService _configurationService;
+        public NetgiroPaymentService(IHttpClientFactory httpClientFactory, IConfigurationService configurationService)
         {
+            _configurationService = configurationService;
             _httpClientFactory = httpClientFactory;
         }
 
@@ -91,11 +93,10 @@ namespace Onnio.PaymentService.Services
 
         private async Task<HttpResponseMessage> MakeApiCallAsync(string endpoint, object payload)
         {
-
             // Get HttpClient from factory
             var client = _httpClientFactory.CreateClient();
 
-            var parameters = ConnectionInfo.GetParameters();
+            var parameters = _configurationService.GetConfigurationAsync<NetgiroParameters>("Config", "NetgiroConfig").Result;
             // Construct full URL
             string url = $"{parameters.BaseUrl}/checkout/{endpoint}";
 
@@ -108,7 +109,7 @@ namespace Onnio.PaymentService.Services
             string json = JsonConvert.SerializeObject(payload, jsonSettings);
            
             // Generate signature hash with SHA256
-            string signature = ConnectionInfo.CalculateSignature(parameters.Secret, timestamp, url, json);
+            string signature = NetgiroConnectionInfo.CalculateSignature(parameters.Secret, timestamp, url, json);
 
             // Set up headers
             client.DefaultRequestHeaders.Clear();

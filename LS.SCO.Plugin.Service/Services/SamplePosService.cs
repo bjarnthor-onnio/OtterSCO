@@ -48,22 +48,14 @@ namespace LS.SCO.Plugin.Service.Services
 
         public PaymentResultDto ProcessExternalPayment(PaymentRequestDto request)
         {
+            
             var response  = _onnioPaymentService.ProcessPaymentAsync(request).Result as PaymentResultDto;
             return response;
-
         }
-        /*public override async Task<AddToTransOutputDto> AddItemAsync(AddToTransInputDto input)
+        public bool TriggerLobicoEvent(string receiptId)
         {
-            AddToTransInputDTO addToTransInputDTO = new AddToTransInputDTO();
-            addToTransInputDTO.terminalId = input.TerminalId;
-            addToTransInputDTO.storeId = input.StoreId;
-            addToTransInputDTO.staffId = input.StaffId;
-            addToTransInputDTO.token = input.Token;
-            addToTransInputDTO.barcode = input.Data.Id;
-            addToTransInputDTO.receiptId = input.Data.TransactionId;
-            Transaction transaction = new Transaction();
-            transaction.AddToTransaction(addToTransInputDTO);
-            return new AddToTransOutputDto();
-        }*/
+            return _onnioPaymentService.AppPaymentService.TriggerAppPaymentStateChangeAsync(receiptId).Result;
+            
+        }
     }
 }

@@ -12,6 +12,7 @@ using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
 using LS.SCO.Plugin.Service.Interfaces;
 using LS.SCO.Plugin.Service.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 {
@@ -29,6 +30,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 if (_currTransaction.Transaction.NoOfItemLines > 0)
                 {
                     fullBasketResult res = new fullBasketResult();
+
                     res.products = new List<Products_fullBasket>();
                     foreach (var saleItem in _currTransaction.Transaction.SaleItems.Where(x => x.Voided == false))
                     {
@@ -40,6 +42,15 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                             {
                                 discountAmount = (int)saleItem.PeriodicDiscountAmount * 100,
                                 discountText = saleItem.PeriodicDiscountDescription
+                            });
+                        }
+                        if(saleItem.PriceReductions.Count > 0)
+                        {
+                            var discount = saleItem.PriceReductions.First();
+                            productDiscounts.Add(new Discounts_fullBasket()
+                            {
+                                discountAmount = Math.Abs((int)discount.Amount * 10),
+                                discountText = discount.PromotionText
                             });
                         }
                         p.barcode = saleItem.ID;
@@ -56,40 +67,27 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         p.securityMode = "SkipBagging";
                         p.discount = productDiscounts;
                         p.discountText = productDiscounts.Count() > 0 ? productDiscounts.Last()?.discountText : "";
-                        
+
 
                         res.products.Add(p);
                     }
                     _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.fullBasket
                     {
                         @params = res
+
                     });
                     _otterEventsManager.sendTotals(_currTransaction.Transaction.BalanceAmountWithTax, _currTransaction.Transaction.NetAmountWithTax);
-                    //TODO -- TEST 
-                    if (_currTransaction.Transaction.IsUnconcludedWithPayments)
-                    {
-                        if (_currTransaction.Transaction.BalanceAmount > 0)
-                        {
-
-                            foreach (var item in _currTransaction.Transaction.PaymentItems)
-                            {
-                                if (item.Amount > 0 && !item.Voided)
-                                {
-                                    _otterProtocolHandler.SendMessage(new payment
-                                    {
-                                        result = new paymentResult
-                                        {
-                                            type = item.Description,
-                                            successful = true,
-                                        },
-                                        id = _otterState.Api_MessageId
-                                    });
-                                }
-                            }
-                        }
-
-                    }
+                    
+                    
                     _otterState.Api_MessageId = null;
+                }
+            }
+            else
+            {
+                var trans = _adapter.StartTransactionAsync();
+                if (trans != null)
+                {
+                    _otterState.Pos_TransactionId = trans.Result.Transaction.ReceiptId;
                 }
             }
         }

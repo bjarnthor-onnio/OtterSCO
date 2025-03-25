@@ -28,7 +28,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
         public void ConnectoToOtterSCO()
         {
-            this._otterProtocolHandler = new OtterProtocolHandler(_logService, _logManager);
+            this._otterProtocolHandler = new OtterProtocolHandler(_logService, _logManager,_configService);
             this._otterState = new OtterState();
             this._manager = new OtterEventsManager(_logService, _logManager, this._otterState, this._otterProtocolHandler);
 

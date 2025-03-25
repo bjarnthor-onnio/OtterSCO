@@ -17,6 +17,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
         {
             _otterProtocolHandler.StopInitialization();
             _otterState.State = OtterState.StatesEnum.Idle;
+            
         }
     }
 }

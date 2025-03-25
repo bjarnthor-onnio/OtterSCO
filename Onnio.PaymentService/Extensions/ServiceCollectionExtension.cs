@@ -17,6 +17,8 @@ namespace Onnio.PaymentService.Extensions
             services.AddScoped<INetgiroPaymentService, NetgiroPaymentService>();
             services.AddScoped<IPeiPaymentService, PeiPaymentService>();
             services.AddScoped<IOnnioPaymentService, OnnioPaymentService>();
+            services.AddScoped<IAppPaymentService, AppPaymentService>();
+            services.AddScoped<ILeikbreytirPaymentService, LeikbreytirPaymentService>();
             services.AddHttpClient();
             return services;
         }

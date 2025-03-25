@@ -17,6 +17,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.Models.FromPOS
     {
         public string transactionId { get; set; }
         public string additionalText { get; set; }
+        public bool askForReceipt { get; set; }
     }
 
 
