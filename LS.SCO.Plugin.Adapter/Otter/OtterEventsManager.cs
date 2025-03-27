@@ -51,13 +51,24 @@ namespace LS.SCO.Plugin.Adapter.Otter
                 @params = new transactionFinishParams
                 {
                     transactionId = _otterState.Pos_TransactionId,
-                    askForReceipt = true
+                    askForReceipt = false
 
                 },
                 id = Guid.NewGuid().ToString()
             });
             _otterState.Pos_LastTransactionId = _otterState.Pos_TransactionId;
             _otterState.Reset();
+        }
+        public void sendTransactionStart()
+        {
+            _otterProtocolHandler.SendMessage(new transactionStart
+            {
+                @params = new transactionStartParams
+                {
+                    transactionId = _otterState.Pos_TransactionId,
+                },
+                id = new Guid().ToString()
+            });
         }
 
     }

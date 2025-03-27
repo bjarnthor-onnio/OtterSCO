@@ -22,7 +22,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters.Extensions
                 input.Token = sampleAdapter?.Configuration.Token;
                 input.StoreId = sampleAdapter?.Configuration.StoreId;
                 input.TerminalId = sampleAdapter?.Configuration.TerminalId;
-                input.StaffId = sampleAdapter?.Configuration.StaffId ?? "420099";
+                input.StaffId = sampleAdapter?.Configuration.StaffId;
             }
         }
     }

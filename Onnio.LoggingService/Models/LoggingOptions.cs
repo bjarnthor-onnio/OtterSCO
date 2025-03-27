@@ -13,7 +13,7 @@ namespace Onnio.LoggingService.Models
         /// <summary>
         /// The directory where log files will be stored
         /// </summary>
-        public string LogDirectory { get; set; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+        public string LogDirectory { get; set; } = Path.Combine("C:\\ProgramData\\LS Retail\\LS Self-Checkout Connector", "Logs");
 
         /// <summary>
         /// The rolling interval for log files

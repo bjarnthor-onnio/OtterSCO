@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Onnio.ConfigService.Interface;
+using Onnio.ConfigService.Models;
 using Onnio.PaymentService.Extensions;
 using Onnio.PaymentService.Interfaces;
 using Onnio.PaymentService.Models;
@@ -15,10 +18,11 @@ namespace Onnio.PaymentService.Services
     public class AppPaymentService : IAppPaymentService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-
-        public AppPaymentService(IHttpClientFactory httpClientFactory)
+        private readonly IConfigurationService _configurationService;
+        public AppPaymentService(IHttpClientFactory httpClientFactory, IConfigurationService configService)
         {
             _httpClientFactory = httpClientFactory;
+            _configurationService = configService;
         }
         public async Task<bool> TriggerAppPaymentStateChangeAsync(string receiptId)
         {
@@ -31,7 +35,7 @@ namespace Onnio.PaymentService.Services
 
                 var json = JsonConvert.SerializeObject(stateChangeRequest, jsonSettings);
                 
-                var response = await MakeApiCallAsync(json, "SCOPaymentStateTriggers");
+                var response = await MakeApiCallAsync(json, "/SCOPaymentStateTriggers");
                 SCOPaymentStateTriggerDto? result = JsonConvert.DeserializeObject<SCOPaymentStateTriggerDto>(response, jsonSettings);
 
                 return result?.RecalculationNeeded ?? false;
@@ -54,7 +58,8 @@ namespace Onnio.PaymentService.Services
 
             var json = JsonConvert.SerializeObject(appPaymentRequest, jsonSettings);
             // Call the App payment service
-            var response = await MakeApiCallAsync(json, "/SCOPaymentRequests");
+            var response = MakeApiCallAsync(json, "/SCOPaymentRequests").Result;
+            
             // Parse the response
             PaymentResultDto? result = MapResponse(JsonConvert.DeserializeObject<AppPaymentResultDto>(response, jsonSettings));
 
@@ -69,12 +74,12 @@ namespace Onnio.PaymentService.Services
 
             // Make an API call to the App payment service
             var client = _httpClientFactory.CreateClient("AppPaymentService");
-            var connection = ScoBcConnection.GetBcConnection();
-            
-            var url = $"{connection.Url}/{endpoint}";
+            var connection = _configurationService.GetConfigurationAsync<BcConfig>("Config","BcConfig").Result;
+
+            var url = $"{connection.OdataServiceBaseUrl}{endpoint}";
             var request = new HttpRequestMessage(HttpMethod.Post, url);
 
-            var authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{connection.AppKey}:{connection.Password}"));
+            var authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{connection.User}:{connection.Password}"));
             request.Headers.Add("Authorization", $"Basic {authorization}");
             
             var content = new StringContent(json, Encoding.UTF8, "application/json");

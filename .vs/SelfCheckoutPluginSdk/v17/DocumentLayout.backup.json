@@ -1,99 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\repos\\OtterSCO\\",
+  "WorkspaceRootPath": "C:\\Teting\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\messagehandlers\\paymenthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\paymenthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}|Onnio.LoggingService\\Onnio.LoggingService.csproj|c:\\teting\\onnio.loggingservice\\models\\loggingoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}|Onnio.LoggingService\\Onnio.LoggingService.csproj|solutionrelative:onnio.loggingservice\\models\\loggingoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\adapters\\sampleposadapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\adapters\\sampleposadapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}|Onnio.LoggingService\\Onnio.LoggingService.csproj|c:\\teting\\onnio.loggingservice\\extensions\\loggingserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}|Onnio.LoggingService\\Onnio.LoggingService.csproj|solutionrelative:onnio.loggingservice\\extensions\\loggingserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\adapters\\sampleposadapter.privatemethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\adapters\\sampleposadapter.privatemethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\messagehandlers\\dataneededhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\teting\\ls.sco.plugin.adapter\\otter\\messagehandlers\\dataneededhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\dataneededhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\otterprotocolhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\otterprotocolhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\teting\\ls.sco.plugin.adapter\\otter\\messagehandlers\\paymenthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\paymenthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\071b9c7b28b146713b7de12b1ef7cbcb88243b67e16f0c6622e9c40dff7878aa\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Future.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6E501B76-6143-40FD-B5CF-A44FF5420ED7}|Onnio.PaymentService\\Onnio.PaymentService.csproj|c:\\teting\\onnio.paymentservice\\services\\apppaymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E501B76-6143-40FD-B5CF-A44FF5420ED7}|Onnio.PaymentService\\Onnio.PaymentService.csproj|solutionrelative:onnio.paymentservice\\services\\apppaymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\3c1ac9c7759ca040e2c508843af0ed834a1cfcf081a0a928f448e2f5392c4aed\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|c:\\repos\\ottersco\\ls.sco.plugin.service\\serviceregisterers\\sampleserviceregisterer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|solutionrelative:ls.sco.plugin.service\\serviceregisterers\\sampleserviceregisterer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\Temp\\.vsdbgsrc\\d8933d8c84a635e1c37e9eb18c6bd032217008a8799fd62d3548cc8ad96b6005\\Task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|c:\\repos\\ottersco\\ls.sco.plugin.service\\configurationmanager\\sampleserviceconfigurationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|solutionrelative:ls.sco.plugin.service\\configurationmanager\\sampleserviceconfigurationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\messagehandlers\\inithandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\inithandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\ottermessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\ottermessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\iotterprotocolhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\iotterprotocolhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\models\\frompos\\init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\models\\frompos\\init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\messagehandlers\\gopaymenthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\teting\\ls.sco.plugin.adapter\\otter\\messagehandlers\\gopaymenthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\gopaymenthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\models\\fromsco\\init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\models\\fromsco\\init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\teting\\ls.sco.plugin.adapter\\adapters\\sampleposadapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\adapters\\sampleposadapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\messagehandlers\\producthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\producthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Teting\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\messagehandlers\\canceltranshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\messagehandlers\\canceltranshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\otterstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\otterstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\iotterstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\iotterstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|c:\\repos\\ottersco\\ls.sco.plugin.adapter\\otter\\stateobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A53445A7-4A3C-40DA-9B16-CF6BCE14EE78}|LS.SCO.Plugin.Adapter\\LS.SCO.Plugin.Adapter.csproj|solutionrelative:ls.sco.plugin.adapter\\otter\\stateobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|c:\\repos\\ottersco\\ls.sco.plugin.service\\services\\sampleposservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|c:\\teting\\ls.sco.plugin.service\\services\\sampleposservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C0F05420-1E55-4F5F-97AB-82EDE0900331}|LS.SCO.Plugin.Service\\LS.SCO.Plugin.Service.csproj|solutionrelative:ls.sco.plugin.service\\services\\sampleposservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -104,331 +42,111 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "Init.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\Models\\FromPOS\\Init.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\Models\\FromPOS\\Init.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\Models\\FromPOS\\Init.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\Models\\FromPOS\\Init.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T09:31:18.226Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "init.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\Models\\FromSCO\\init.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\Models\\FromSCO\\init.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\Models\\FromSCO\\init.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\Models\\FromSCO\\init.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T09:31:44.242Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "CancelTransHandler.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T11:07:59.955Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "IOtterProtocolHandler.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\IOtterProtocolHandler.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\IOtterProtocolHandler.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\IOtterProtocolHandler.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\IOtterProtocolHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T09:41:52.257Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "DataNeededHandler.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-13T15:40:08.895Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Future.cs",
-              "DocumentMoniker": "C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\071b9c7b28b146713b7de12b1ef7cbcb88243b67e16f0c6622e9c40dff7878aa\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Future.cs",
-              "RelativeDocumentMoniker": "..\\..\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\071b9c7b28b146713b7de12b1ef7cbcb88243b67e16f0c6622e9c40dff7878aa\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Future.cs",
-              "ToolTip": "C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\071b9c7b28b146713b7de12b1ef7cbcb88243b67e16f0c6622e9c40dff7878aa\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Future.cs",
-              "RelativeToolTip": "..\\..\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\071b9c7b28b146713b7de12b1ef7cbcb88243b67e16f0c6622e9c40dff7878aa\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Future.cs",
-              "ViewState": "AgIAAMABAAAAAAAAAADgv9sBAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T15:23:19.59Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "OtterProtocolHandler.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\OtterProtocolHandler.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\OtterProtocolHandler.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\OtterProtocolHandler.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\OtterProtocolHandler.cs",
-              "ViewState": "AgIAAEEAAAAAAAAAAAAvwFoAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T09:41:22.684Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "SamplePosAdapter.PrivateMethods.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.PrivateMethods.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.PrivateMethods.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.PrivateMethods.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.PrivateMethods.cs",
-              "ViewState": "AgIAAGcAAAAAAAAAAAAkwHgAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T12:08:13.732Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PaymentHandler.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\PaymentHandler.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\PaymentHandler.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\PaymentHandler.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\PaymentHandler.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAADgv1EAAAAQAAAAAAAAAA==",
+              "Title": "LoggingOptions.cs",
+              "DocumentMoniker": "C:\\Teting\\Onnio.LoggingService\\Models\\LoggingOptions.cs",
+              "RelativeDocumentMoniker": "Onnio.LoggingService\\Models\\LoggingOptions.cs",
+              "ToolTip": "C:\\Teting\\Onnio.LoggingService\\Models\\LoggingOptions.cs",
+              "RelativeToolTip": "Onnio.LoggingService\\Models\\LoggingOptions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T13:55:18.345Z",
+              "WhenOpened": "2025-03-27T22:52:32.756Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "SamplePosAdapter.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
-              "ViewState": "AgIAAHQBAAAAAAAAAADgv4cBAAAMAAAAAAAAAA==",
+              "Title": "LoggingServiceExtensions.cs",
+              "DocumentMoniker": "C:\\Teting\\Onnio.LoggingService\\Extensions\\LoggingServiceExtensions.cs",
+              "RelativeDocumentMoniker": "Onnio.LoggingService\\Extensions\\LoggingServiceExtensions.cs",
+              "ToolTip": "C:\\Teting\\Onnio.LoggingService\\Extensions\\LoggingServiceExtensions.cs",
+              "RelativeToolTip": "Onnio.LoggingService\\Extensions\\LoggingServiceExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T08:40:09.946Z",
+              "WhenOpened": "2025-03-27T22:52:17.401Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "SampleServiceRegisterer.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Service\\ServiceRegisterers\\SampleServiceRegisterer.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Service\\ServiceRegisterers\\SampleServiceRegisterer.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Service\\ServiceRegisterers\\SampleServiceRegisterer.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Service\\ServiceRegisterers\\SampleServiceRegisterer.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAADgvywAAAAMAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "GoPaymentHandler.cs",
+              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\GoPaymentHandler.cs",
+              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\GoPaymentHandler.cs",
+              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\GoPaymentHandler.cs",
+              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\GoPaymentHandler.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAnwBMAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T11:47:47.588Z",
+              "WhenOpened": "2025-03-27T21:10:26.476Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "Task.cs",
-              "DocumentMoniker": "C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\3c1ac9c7759ca040e2c508843af0ed834a1cfcf081a0a928f448e2f5392c4aed\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Task.cs",
-              "RelativeDocumentMoniker": "..\\..\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\3c1ac9c7759ca040e2c508843af0ed834a1cfcf081a0a928f448e2f5392c4aed\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Task.cs",
-              "ToolTip": "C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\3c1ac9c7759ca040e2c508843af0ed834a1cfcf081a0a928f448e2f5392c4aed\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Task.cs",
-              "RelativeToolTip": "..\\..\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\SourceServer\\3c1ac9c7759ca040e2c508843af0ed834a1cfcf081a0a928f448e2f5392c4aed\\src\\libraries\\System.Private.CoreLib\\src\\System\\Threading\\Tasks\\Task.cs",
-              "ViewState": "AgIAAO8CAAAAAAAAAADgvwIDAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T12:07:10.048Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Task.cs",
-              "DocumentMoniker": "C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\Temp\\.vsdbgsrc\\d8933d8c84a635e1c37e9eb18c6bd032217008a8799fd62d3548cc8ad96b6005\\Task.cs",
-              "RelativeDocumentMoniker": "..\\..\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\Temp\\.vsdbgsrc\\d8933d8c84a635e1c37e9eb18c6bd032217008a8799fd62d3548cc8ad96b6005\\Task.cs",
-              "ToolTip": "C:\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\Temp\\.vsdbgsrc\\d8933d8c84a635e1c37e9eb18c6bd032217008a8799fd62d3548cc8ad96b6005\\Task.cs [Read Only]",
-              "RelativeToolTip": "..\\..\\Users\\Bjarn\u00FE\u00F3rSigur\u00F0arson\\AppData\\Local\\Temp\\.vsdbgsrc\\d8933d8c84a635e1c37e9eb18c6bd032217008a8799fd62d3548cc8ad96b6005\\Task.cs [Read Only]",
-              "ViewState": "AgIAAHMHAAAAAAAAAADgv48HAAADAAAAAQAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T16:41:09.22Z",
-              "EditorCaption": " [Read Only]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "InitHandler.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\InitHandler.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\InitHandler.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\InitHandler.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\InitHandler.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAYwBMAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T14:22:04.964Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "SampleServiceConfigurationManager.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Service\\ConfigurationManager\\SampleServiceConfigurationManager.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Service\\ConfigurationManager\\SampleServiceConfigurationManager.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Service\\ConfigurationManager\\SampleServiceConfigurationManager.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Service\\ConfigurationManager\\SampleServiceConfigurationManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T10:24:23.936Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "OtterMessages.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\OtterMessages.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\OtterMessages.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\OtterMessages.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\OtterMessages.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T09:42:06.91Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "GoPaymentHandler.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\GoPaymentHandler.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\GoPaymentHandler.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\GoPaymentHandler.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\GoPaymentHandler.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T15:51:54.767Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "CancelTransHandler.cs",
-              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs",
-              "RelativeDocumentMoniker": "..\\..\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs",
-              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs",
-              "RelativeToolTip": "..\\..\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\CancelTransHandler.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T13:48:24.565Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "IOtterState.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\IOtterState.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\IOtterState.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\IOtterState.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\IOtterState.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T13:55:31.947Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
               "Title": "SamplePosAdapter.cs",
               "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
-              "RelativeDocumentMoniker": "..\\..\\Teting\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
+              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
               "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
-              "RelativeToolTip": "..\\..\\Teting\\LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
-              "ViewState": "AgIAAFQBAAAAAAAAAADgv6gBAAANAAAAAAAAAA==",
+              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Adapters\\SamplePosAdapter.cs",
+              "ViewState": "AgIAAA4BAAAAAAAAAAD4vxkBAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T15:26:25.007Z",
+              "WhenOpened": "2025-03-27T21:32:13.537Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "ProductHandler.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
-              "ViewState": "AgIAAK4AAAAAAAAAAADgv7wAAAA3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T09:06:21.494Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "StateObject.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\StateObject.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\StateObject.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\StateObject.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\StateObject.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T13:55:38.777Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "OtterState.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\OtterState.cs",
-              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\OtterState.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Adapter\\Otter\\OtterState.cs",
-              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\OtterState.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAACYAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T13:55:49.101Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "ProductHandler.cs",
-              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
-              "RelativeDocumentMoniker": "..\\..\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
-              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
-              "RelativeToolTip": "..\\..\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\ProductHandler.cs",
-              "ViewState": "AgIAAMcAAAAAAAAAAADgv9oAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T11:14:44.233Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 7,
               "Title": "SamplePosService.cs",
-              "DocumentMoniker": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
+              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
               "RelativeDocumentMoniker": "LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
-              "ToolTip": "C:\\repos\\OtterSCO\\LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
+              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
               "RelativeToolTip": "LS.SCO.Plugin.Service\\Services\\SamplePosService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACUAAAAAAAAAAADgvzoAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T08:39:57.735Z"
+              "WhenOpened": "2025-03-27T21:32:13.565Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AppPaymentService.cs",
+              "DocumentMoniker": "C:\\Teting\\Onnio.PaymentService\\Services\\AppPaymentService.cs",
+              "RelativeDocumentMoniker": "Onnio.PaymentService\\Services\\AppPaymentService.cs",
+              "ToolTip": "C:\\Teting\\Onnio.PaymentService\\Services\\AppPaymentService.cs",
+              "RelativeToolTip": "Onnio.PaymentService\\Services\\AppPaymentService.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAArwFYAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T21:32:13.681Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PaymentHandler.cs",
+              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\PaymentHandler.cs",
+              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\PaymentHandler.cs",
+              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\PaymentHandler.cs",
+              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\PaymentHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T21:14:36.246Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DataNeededHandler.cs",
+              "DocumentMoniker": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
+              "RelativeDocumentMoniker": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
+              "ToolTip": "C:\\Teting\\LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
+              "RelativeToolTip": "LS.SCO.Plugin.Adapter\\Otter\\MessageHandlers\\DataNeededHandler.cs",
+              "ViewState": "AgIAAGIAAAAAAAAAAADwv3IAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T21:13:45.043Z",
+              "EditorCaption": ""
             }
           ]
         }

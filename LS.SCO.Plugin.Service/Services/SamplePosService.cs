@@ -9,9 +9,9 @@ using Onnio.PaymentService.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Onnio.PaymentService;
 using Onnio.PaymentService.Models;
-using Onnio.BcIntegrator;
+
 using LS.SCO.Entity.DTO.SCOService.AddToTransaction;
-using Onnio.BcIntegrator.Models;
+
 
 namespace LS.SCO.Plugin.Service.Services
 {

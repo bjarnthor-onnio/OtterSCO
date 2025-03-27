@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Onnio.ConfigService.Interface;
+using Onnio.ConfigService.Models;
 using Onnio.PaymentService.Extensions;
 using Onnio.PaymentService.Interfaces;
 using Onnio.PaymentService.Models;
@@ -16,9 +18,11 @@ namespace Onnio.PaymentService.Services
     internal class LeikbreytirPaymentService : ILeikbreytirPaymentService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public LeikbreytirPaymentService(IHttpClientFactory httpClientFactory)
+        private readonly IConfigurationService _configurationService;
+        public LeikbreytirPaymentService(IHttpClientFactory httpClientFactory, IConfigurationService configurationService)
         {
             _httpClientFactory = httpClientFactory;
+            _configurationService = configurationService;
         }
         public async Task<PaymentResultDto> ProcessLeikbreytirPaymentAsync(PaymentRequestDto request)
         {
@@ -49,10 +53,10 @@ namespace Onnio.PaymentService.Services
         private async Task<string> MakeApiCallAsync(string json, string endpoint)
         {
             var client = _httpClientFactory.CreateClient("AppPaymentService");
-            var connection = ScoBcConnection.GetBcConnection();
-            var url = $"{connection.Url}/{endpoint}";
+            var connection = _configurationService.GetConfigurationAsync<BcConfig>("Config", "BcConfig").Result;
+            var url = $"{connection.OdataServiceBaseUrl}/{endpoint}";
             var request = new HttpRequestMessage(HttpMethod.Post, url);
-            var authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{connection.AppKey}:{connection.Password}"));
+            var authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{connection.User}:{connection.Password}"));
             request.Headers.Add("Authorization", $"Basic {authorization}");
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             request.Content = content;

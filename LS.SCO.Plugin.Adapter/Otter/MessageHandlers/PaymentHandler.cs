@@ -137,7 +137,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
         {
             var msg = (Otter.Models.FromSCO.payment)message;
 
-            if (msg.@params.type == "18")
+            if (msg.@params.type == "18" || msg.@params.type.ToLower().Contains("netgiro") || msg.@params.type.ToLower().Contains("netgiró"))
             {
 
                 var dataNeeded = new dataNeeded();
@@ -185,8 +185,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params = new dataNeededParams();
                 dataNeeded.@params.operatorMode = false;
                 dataNeeded.@params.titleText = "Gjafakort";
-                dataNeeded.@params.instructionsText = "Skannaðu strikamerki";
-                dataNeeded.@params.keyPad = false;
+                dataNeeded.@params.instructionsText = "Skannaðu strikamerki eða sláðu inn kortanúmer";
+                dataNeeded.@params.keyPad = true;
                 dataNeeded.@params.deviceError = false;
                 dataNeeded.@params.minimalInputLength = 6;
                 dataNeeded.@params.exitButton = 1;
@@ -205,17 +205,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 var result = _adapter.PayForCurrentTransactionExternal("23").Result;
                 if (result.Success)
                 {
-                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
-                    {
-                        result = new paymentResult
-                        {
-                            successful = true,
-                        },
-                        id = _otterState.Api_MessageId
-                    });
-
                     var postOutput = await _adapter.FinishTransactionAsync();
-
 
                     if (postOutput.ErrorList?.Count() > 0)
                     {
@@ -225,23 +215,23 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                             result = new paymentResult
                             {
                                 successful = false,
-                                message = "Failed to Post Transaction at LS Central"
+                                message = "Ekki tókst að bóka færslu en greiðsla hefur verið kláruð. Hafið samband við starfsmann."
                             },
                             id = _otterState.Api_MessageId
                         });
+                        _otterState.Api_MessageId = null;
                     }
                     else
                     {
-
                         _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
                         {
                             result = new paymentResult
                             {
                                 successful = true,
+                                amount = (int)_otterState.Pos_BalanceAmount * 100
                             },
                             id = _otterState.Api_MessageId
                         });
-                        _otterState.Api_MessageId = null;
 
                         _otterEventsManager.sendTransactionFinish();
 
@@ -260,6 +250,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         },
                         id = _otterState.Api_MessageId
                     });
+                    _otterState.Api_MessageId = null;
                 }
 
             }
@@ -274,6 +265,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     },
                     id = _otterState.Api_MessageId
                 });
+                _otterState.Api_MessageId = null;
             }
         }
     }

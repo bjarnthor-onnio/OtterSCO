@@ -14,7 +14,7 @@ namespace Onnio.LoggingService.Extensions
         public static LoggingOptions LoadConfiguration(string configFilePath = null)
         {
             // Use default filename if not specified
-            configFilePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DEFAULT_CONFIG_FILENAME);
+            configFilePath ??= Path.Combine("C:\\ProgramData\\LS Retail\\LS Self-Checkout Connector\\Logs", DEFAULT_CONFIG_FILENAME);
 
             var options = new LoggingOptions();
 

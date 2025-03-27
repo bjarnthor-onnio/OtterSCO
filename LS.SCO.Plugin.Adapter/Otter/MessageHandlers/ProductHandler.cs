@@ -4,6 +4,7 @@ using LS.SCO.Entity.DTO.SCOService.Items;
 using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
+using Microsoft.AspNetCore.Mvc.Formatters.Internal;
 
 namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 {
@@ -14,8 +15,16 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
         public async override void Handle(object message)
         {
+            
             var msg = (Otter.Models.FromSCO.product)message;
             _otterState.Api_MessageId_Product = msg.id;
+            
+            
+            if(!_otterState.Pos_TransactionStarted)
+            {
+                _otterState.Pos_TransactionStarted = true;
+                _otterEventsManager.sendTransactionStart();
+            }
 
             var input = new GetItemDetailsInputDto();
 
@@ -27,7 +36,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
             if (itemDetails.ErrorList?.Count() > 0)
             {
-                Console.WriteLine("################   ERROR DURING PRODUCT");
+                Console.WriteLine("################   ERROR DURING PRODUCT SCAN");
                 //TODO check error code and map to reponse
                 _otterProtocolHandler.SendMessage(OtterMessages.ProductError(_otterState.Api_MessageId_Product, itemDetails.ErrorList.First().ErrorMessage));
                 return;
@@ -37,14 +46,14 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 //Check if item is available for sale
                 if (itemDetails.NotForSale || itemDetails.NotForScoSale)
                 {
-                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.product
+                    _otterProtocolHandler.SendMessage(new product
                     {
-                        result = new Otter.Models.FromPOS.ProductResult()
+                        result = new ProductResult()
 
                         {
                             message = "Not for sale",
                             successful = false,
-                            productExceptions = new Otter.Models.FromPOS.ProductExceptions()
+                            productExceptions = new ProductExceptions()
                             {
                                 message = "Item is not for sale"
                             }
@@ -58,13 +67,13 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 //Check if quantity is required
                 if (itemDetails.QuantityEntryRequired && msg.@params.quantity == null)
                 {
-                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.product
+                    _otterProtocolHandler.SendMessage(new product
                     {
-                        result = new Otter.Models.FromPOS.ProductResult()
+                        result = new ProductResult()
                         {
                             message = "",
                             successful = false,
-                            productExceptions = new Otter.Models.FromPOS.ProductExceptions()
+                            productExceptions = new ProductExceptions()
                             {
                                 message = "",
                                 quantity = true
@@ -79,14 +88,14 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 //Check if weight is required
                 if (itemDetails.ScaleItem && msg.@params.weight == null)
                 {
-                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.product
+                    _otterProtocolHandler.SendMessage(new product
                     {
-                        result = new Otter.Models.FromPOS.ProductResult()
+                        result = new ProductResult()
 
                         {
                             message = "",
                             successful = false,
-                            productExceptions = new Otter.Models.FromPOS.ProductExceptions()
+                            productExceptions = new ProductExceptions()
                             {
                                 message = "",
                                 weight = true
@@ -101,14 +110,14 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 //Check if price is required
                 if (itemDetails.PriceEntryRequired && (msg.@params.price == null || msg.@params.price == 0))
                 {
-                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.product
+                    _otterProtocolHandler.SendMessage(new product
                     {
-                        result = new Otter.Models.FromPOS.ProductResult()
+                        result = new ProductResult()
 
                         {
                             message = "",
                             successful = false,
-                            productExceptions = new Otter.Models.FromPOS.ProductExceptions()
+                            productExceptions = new ProductExceptions()
                             {
                                 message = "",
                                 price = true
@@ -123,14 +132,14 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 //Check if quantity limit reached
                 if (itemDetails.QuantityDisallowed)
                 {
-                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.product
+                    _otterProtocolHandler.SendMessage(new product
                     {
-                        result = new Otter.Models.FromPOS.ProductResult()
+                        result = new ProductResult()
 
                         {
                             message = "",
                             successful = false,
-                            productExceptions = new Otter.Models.FromPOS.ProductExceptions()
+                            productExceptions = new ProductExceptions()
                             {
                                 message = "",
                                 quantityLimit = true
@@ -147,7 +156,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             decimal weight = msg.@params.weight > 0 ? (decimal)msg.@params.weight : 0;
 
             //Add item to transaction
-            decimal qty = itemDetails.ScaleItem ? (weight / 1000) : 1;
+            decimal qty = itemDetails.ScaleItem ? (weight / 1000) : Convert.ToDecimal(msg.@params.quantity);
 
             int ageLimit = 0;
             int.TryParse(itemDetails.FeatureFlags?.Find(x => x.Flag == "AgeLimit")?.Value, out ageLimit);
@@ -180,14 +189,14 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 if (saleItem.PeriodicDiscountAmount > 0)
                 {
                     discountAdded = true;
-
+                
                     productDiscounts.Add(new Discounts()
                     {
                         discountAmount = (int)saleItem.PeriodicDiscountAmount * 100,
                         discountText = saleItem.PeriodicDiscountDescription
                     });
                 }
-                if (saleItem.PriceReductions.Count > 0)
+                else if (saleItem.PriceReductions.Count > 0)
                 {
                     discountAdded = true;
                     foreach (var discount in saleItem.PriceReductions)
@@ -238,12 +247,15 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         addProduct.@params.totalPrice = (int)((saleItem.NetAmount + saleItem.TaxAmount) * 100);
                         addProduct.@params.discount = new List<Otter.Models.FromPOS.Discount_addProduct>();
                         addProduct.@params.barcode = itemDetails.BarCode;
-                        addProduct.@params.discount.Add(new Otter.Models.FromPOS.Discount_addProduct()
+                        if (saleItem.PeriodicDiscountAmount > 0)
                         {
-                            discountAmount = (int)item.PeriodicDiscountAmount * 100,
-                            discountText = item.PeriodicDiscountDescription
-                        });
-                        if (item.PriceReductions.Count > 0)
+                            addProduct.@params.discount.Add(new Otter.Models.FromPOS.Discount_addProduct()
+                            {
+                                discountAmount = (int)item.PeriodicDiscountAmount * 100,
+                                discountText = item.PeriodicDiscountDescription
+                            });
+                        }
+                        else if (item.PriceReductions.Count > 0)
                         {
                             var discount = saleItem.PriceReductions.First();
                             addProduct.@params.discount.Add(new Otter.Models.FromPOS.Discount_addProduct()

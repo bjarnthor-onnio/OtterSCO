@@ -13,14 +13,14 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
         public override void Handle(object message)
         {
             var msg = message as Otter.Models.FromSCO.exitPayment;
-
+            _otterState.Api_MessageId = msg.id;
             _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.exitPayment
             {
                 result = new exitPaymentResult
                 {
                     successful = true,
                 },
-                id = msg.id    
+                id = _otterState.Api_MessageId    
             });
             _otterState.Api_MessageId = null;
         }

@@ -13,7 +13,10 @@ using LS.SCO.Services.ServiceRegisterers;
 using LS.SCO.WorkerService;
 using Microsoft.Extensions.DependencyInjection;
 using Onnio.ConfigService.Extensions;
+using Onnio.LoggingService.Extensions;
 using Onnio.PaymentService.Extensions;
+
+
 
 
 namespace LS.SCO.Plugin.Service.ServiceRegisterers
@@ -40,7 +43,7 @@ namespace LS.SCO.Plugin.Service.ServiceRegisterers
 
         public override void RegisterServices(IServiceCollection services = null)
         {
-            //Thread.Sleep(10000);
+           
             base.RegisterServices(services);
 
             services.AddSingleton<ISamplePosService, SamplePosService>();
@@ -49,6 +52,8 @@ namespace LS.SCO.Plugin.Service.ServiceRegisterers
             services.AddSingleton<IServiceConfigurationManager, SampleServiceConfigurationManager>();
             services.AddSingleton<IAdapterValidationService, SampleAdapterValidationService>();
             services.AddSingleton<IScoControllerService, SampleServiceController>();
+
+            services.AddSerilogServices();
             services?.AddHostedService<BaseStarterService>();
             services.AddHttpClient();
             services.AddPaymentServices();

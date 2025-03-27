@@ -44,7 +44,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                                 discountText = saleItem.PeriodicDiscountDescription
                             });
                         }
-                        if(saleItem.PriceReductions.Count > 0)
+                        else if(saleItem.PriceReductions.Count > 0)
                         {
                             var discount = saleItem.PriceReductions.First();
                             productDiscounts.Add(new Discounts_fullBasket()
@@ -88,6 +88,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 if (trans != null)
                 {
                     _otterState.Pos_TransactionId = trans.Result.Transaction.ReceiptId;
+                   
                 }
             }
         }
