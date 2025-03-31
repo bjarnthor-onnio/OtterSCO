@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Onnio.PaymentService.Extensions
 {
    
-    public class ConnectionInfo
+    public class BcConnectionInfo
     {
         public string OdataServiceBaseUrl { get; set; }
         public string AppKey { get; set; }

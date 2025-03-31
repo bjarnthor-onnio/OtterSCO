@@ -43,6 +43,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     addProduct.@params.productId = item.LineNr;
                     addProduct.@params.price = (int)item.PriceWithTax * 100;
                     addProduct.@params.totalPrice = (int)((item.NetAmount + item.TaxAmount) * 100);
+                    addProduct.@params.barcode = item.Barcode;
                     addProduct.@params.discount = new List<Otter.Models.FromPOS.Discount_addProduct>();
                     Otter.Models.FromPOS.Discount_addProduct discount = null;
 
