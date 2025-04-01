@@ -51,7 +51,7 @@ namespace LS.SCO.Plugin.Adapter.Otter
                 @params = new transactionFinishParams
                 {
                     transactionId = _otterState.Pos_TransactionId,
-                    askForReceipt = false
+                    askForReceipt = true
 
                 },
                 id = Guid.NewGuid().ToString()

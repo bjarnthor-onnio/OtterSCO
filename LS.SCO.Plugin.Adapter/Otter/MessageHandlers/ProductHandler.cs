@@ -261,7 +261,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                             var discount = saleItem.PriceReductions.First();
                             addProduct.@params.discount.Add(new Otter.Models.FromPOS.Discount_addProduct()
                             {
-                                discountAmount = Math.Abs((int)discount.Amount * 100),
+                                discountAmount = Math.Abs((int)discount.Amount * 10),
                                 discountText = discount.PromotionText
                             });
                         }

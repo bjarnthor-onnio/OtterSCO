@@ -62,7 +62,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         {
                             discount = new Otter.Models.FromPOS.Discount_addProduct()
                             {
-                                discountAmount = (int)priceReduction.Amount * 100,
+                                discountAmount = (int)priceReduction.Amount * 10,
                                 discountText = priceReduction.PromotionText
                             };
                             addProduct.@params.discount.Add(discount);
