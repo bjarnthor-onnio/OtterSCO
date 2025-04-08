@@ -112,7 +112,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         private async Task<AddToTransOutputDto> AddPaymentLineToTransaction(string tenderType, EFTRequestInputDto input)
         {
             var tenderInput = this._mapper.Map<EFTRequestInputDto, AddToTransInputDto>(input);
-
+            tenderInput.Data.ForceFinalPrice = true;
             tenderInput.Data ??= new AddToTransInputDataDto();
             tenderInput.Data.Code = tenderType;
 

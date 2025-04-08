@@ -42,14 +42,40 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     dataNeeded.@params.keyPad = true;
                     dataNeeded.@params.deviceError = false;
                     dataNeeded.@params.keyPadInputMask = 4;
-                    dataNeeded.@params.keyPadPattern = "###-####";
-                    dataNeeded.@params.minimalInputLength = 6;
+                    dataNeeded.@params.keyPadPattern = "######-####";
+                    dataNeeded.@params.minimalInputLength = 10;
                     dataNeeded.@params.exitButton = 1;
+                    dataNeeded.@params.scannerEnabled = true;
                     dataNeeded.@params.instructionsText = result.ErrorList.First().ErrorMessage;
                     dataNeeded.error = result.ErrorList.First().ErrorMessage;
                     dataNeeded.id = _otterState.Api_MessageId_Payment;
                     _otterProtocolHandler.SendMessage(dataNeeded);
                     
+                    return;
+                }
+                dataNeeded.@params.clearScreen = true;
+                dataNeeded.id = _otterState.Api_MessageId_Payment;
+                _otterProtocolHandler.SendMessage(dataNeeded);
+                _otterState.Api_MessageId_Payment = null;
+
+            }
+            if (_otterState.Api_Active_Payment_Method == "22")
+            {
+                var result = _adapter.PayForCurrentTransactionExternal("22", msg.result.data).Result;
+
+                if (result.ErrorList.Count() > 0)
+                {
+                    dataNeeded.@params = new dataNeededParams();
+                    dataNeeded.@params.operatorMode = false;
+                    dataNeeded.@params.titleText = "Pei";
+                    dataNeeded.@params.keyPad = false;
+                    dataNeeded.@params.deviceError = false;
+                    dataNeeded.@params.exitButton = 1;
+                    dataNeeded.@params.instructionsText = result.ErrorList.First().ErrorMessage;
+                    dataNeeded.error = result.ErrorList.First().ErrorMessage;
+                    dataNeeded.id = _otterState.Api_MessageId_Payment;
+                    _otterProtocolHandler.SendMessage(dataNeeded);
+
                     return;
                 }
                 dataNeeded.@params.clearScreen = true;

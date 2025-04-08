@@ -144,12 +144,13 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params = new dataNeededParams();
                 dataNeeded.@params.operatorMode = false;
                 dataNeeded.@params.titleText = "Netgíró";
-                dataNeeded.@params.instructionsText = "Sláðu inn símanúmer";
+                dataNeeded.@params.instructionsText = "Sláðu/skannaðu inn appnúmer";
                 dataNeeded.@params.keyPad = true;
                 dataNeeded.@params.deviceError = false;
                 dataNeeded.@params.keyPadInputMask = 4;
-                dataNeeded.@params.keyPadPattern = "###-####";
-                dataNeeded.@params.minimalInputLength = 6;
+                dataNeeded.@params.keyPadPattern = "######-####";
+                dataNeeded.@params.minimalInputLength = 10;
+                dataNeeded.@params.scannerEnabled = true;
                 dataNeeded.@params.exitButton = 1;
 
                 dataNeeded.id = Guid.NewGuid().ToString();
@@ -159,7 +160,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
                 return;
             }
-            if (msg.@params.type == "pei")
+            if (msg.@params.type == "22")
             {
                 var dataNeeded = new dataNeeded();
                 dataNeeded.@params = new dataNeededParams();
@@ -174,7 +175,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
                 dataNeeded.id = Guid.NewGuid().ToString();
                 _otterState.Api_MessageId_Payment = dataNeeded.id;
-                _otterState.Api_Active_Payment_Method = "Pei";
+                _otterState.Api_Active_Payment_Method = msg.@params.type;
                 _otterProtocolHandler.SendMessage(dataNeeded);
 
                 return;

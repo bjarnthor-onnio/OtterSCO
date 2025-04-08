@@ -37,7 +37,7 @@ namespace Onnio.PaymentService.Services
                         return await NetgiroPaymentService.ProcessPaymentAsync(request);
 
                     case PaymentServiceType.Pei:
-                        return await PeiPaymentService.ProcessPaymentAsync();
+                        return await PeiPaymentService.ProcessPaymentAsync(request);
                     case PaymentServiceType.App:
                         return await AppPaymentService.ProcessAppPaymentAsync(request);
                     case PaymentServiceType.Leikbreytir:

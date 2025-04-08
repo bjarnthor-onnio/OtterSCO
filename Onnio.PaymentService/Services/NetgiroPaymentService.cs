@@ -56,7 +56,7 @@ namespace Onnio.PaymentService.Services
             int RetryInterval = result.ProcessCartCheckIntervalMiliseconds;
             var checkCartRequest = new CheckCartRequest { TransactionId = result.TransactionId };
             Stopwatch stopwatch = new Stopwatch();
-            TimeSpan timeLimit = TimeSpan.FromMinutes(2);
+            TimeSpan timeLimit = TimeSpan.FromMinutes(1);
 
             do
             {

@@ -314,7 +314,10 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             {
                 request.paymentService = PaymentServiceType.Netgiro;
             }
-
+            if(tenderType == "22")
+            {
+                request.paymentService = PaymentServiceType.Pei;
+            }
 
             var result = _posService.ProcessExternalPayment(request);
 
@@ -420,7 +423,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                     }
                     return purchaseResult;
                 }
-
+                
                 var addTenderOutput = await AddPaymentLineToTransaction(tenderType, input);
 
                 if (!addTenderOutput.IsValid())
