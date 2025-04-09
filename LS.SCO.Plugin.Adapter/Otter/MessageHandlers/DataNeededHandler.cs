@@ -30,9 +30,9 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             //TODO: Create a handler pattern for the different payment methods
 
-            if (_otterState.Api_Active_Payment_Method == "18")
+            if (_otterState.Api_Active_Payment_Method == "NETGIRO_TT")
             {
-                var result = _adapter.PayForCurrentTransactionExternal("18", msg.result.data.Replace("-", ""), false).Result;
+                var result = _adapter.PayForCurrentTransactionExternal("NETGIRO_TT", msg.result.data.Replace("-", ""), false).Result;
 
                 if (result.ErrorList.Count() > 0)
                 {

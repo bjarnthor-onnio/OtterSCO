@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using System.Xml.Serialization;
 using Onnio.BcIntegrator.Models;
-using SCOTransactionServices;
+//using SCOTransactionServices;
 
 namespace Onnio.BcIntegrator
 {
@@ -33,7 +33,7 @@ namespace Onnio.BcIntegrator
         }*/
         public void AddToTransaction(AddToTransInputDTO input)
         {
-            var client = new SCOAddToTrans_PortClient();
+           /* var client = new SCOAddToTrans_PortClient();
 
             // Construct the request
             var request = new SCOAddToTransaction();
@@ -77,7 +77,7 @@ namespace Onnio.BcIntegrator
             {
                 // Close the client
                 client.CloseAsync();
-            }
+            }*/
         }
     }
 }

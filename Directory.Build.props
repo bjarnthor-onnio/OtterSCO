@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <Company>Onnio ehf</Company>
+    <Copyright>Copyright © $(Company) $([System.DateTime]::Now.Year)</Copyright>
+    <Authors>Sco integration team</Authors>
+    <Product>SCO Connector for Otter</Product>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>25.2.2548.1</AssemblyVersion>
+    <FileVersion>25.2.2548.1</FileVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+</Project>

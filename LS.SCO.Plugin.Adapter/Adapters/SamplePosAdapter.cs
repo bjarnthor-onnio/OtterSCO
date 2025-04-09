@@ -33,6 +33,7 @@ using LS.SCO.Entity.Base;
 using Onnio.PaymentService.Services;
 using Onnio.ConfigService.Interface;
 using LS.SCO.Entity.DTO.SCOService.PrintPreviousTransaction;
+using LS.SCO.Entity.DTO.SCOService.CalculateBasket;
 
 namespace LS.SCO.Plugin.Adapter.Adapters
 {
@@ -238,7 +239,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        public async Task<AddToTransOutputDto> AddItemToTransaction(string barCode, string itemId, string receiptId = "", decimal qty = 0)
+        public async Task<AddToTransOutputDto> AddItemToTransaction(string barCode, string itemId, string receiptId = "", decimal qty = 0, bool isCoupon = false)
         {
             var input = new AddToTransInputDto { Data = new AddToTransInputDataDto { } };
             input.Data.Code = barCode;
@@ -247,8 +248,14 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             input.Data.Quantity = qty;
 
             input.ConfigureBaseInputProperties(this);
-            input.Data.EntryMethod = "";
+            
+            if(isCoupon)
+            {
+                input.Data.EntryType = 6;
+            }
+            
             var result = await this._posService.AddItemAsync(input);
+                
 
             if (result != null && result.Result == "IFC_OK")
             {
@@ -310,7 +317,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             {
                 request.paymentService = PaymentServiceType.Leikbreytir;
             }
-            if(tenderType == "18")
+            if(tenderType == "18"|| tenderType.ToLower().Contains("netgiro"))
             {
                 request.paymentService = PaymentServiceType.Netgiro;
             }
@@ -600,6 +607,13 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             input.ConfigureBaseInputProperties(this);
             input.TransactionId = 0;
             var response = await _posService.PrintPreviousTransactionAsync(input);
+        }
+        public async Task<CalculateBasketOutputDto> CalculateTotals()
+        {
+            var input = new CalculateBasketInputDto();
+            input.ConfigureBaseInputProperties(this);
+            var response = await _posService.CalculateBasketAsync(input);
+            return response;
         }
     }
 }
