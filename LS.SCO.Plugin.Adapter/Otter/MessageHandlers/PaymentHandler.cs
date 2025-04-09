@@ -137,7 +137,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
         {
             var msg = (Otter.Models.FromSCO.payment)message;
 
-            if (msg.@params.type == "18" || msg.@params.type.ToLower().Contains("netgiro") || msg.@params.type.ToLower().Contains("netgiró"))
+            if (msg.@params.type == "18" || msg.@params.type == "Netgiro_TT")
             {
 
                 var dataNeeded = new dataNeeded();
@@ -166,10 +166,11 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params = new dataNeededParams();
                 dataNeeded.@params.operatorMode = false;
                 dataNeeded.@params.titleText = "Pei";
-                dataNeeded.@params.instructionsText = "Skannaðu strikamerki";
-                dataNeeded.@params.keyPad = false;
+                dataNeeded.@params.instructionsText = "Sláðu inn númer/skannaðu inn strikamerki";
+                dataNeeded.@params.keyPad = true;
                 dataNeeded.@params.deviceError = false;
-                dataNeeded.@params.minimalInputLength = 6;
+                dataNeeded.@params.keyPadPattern = "####-####-####";
+                dataNeeded.@params.minimalInputLength = 12;
                 dataNeeded.@params.exitButton = 1;
                 dataNeeded.@params.scannerEnabled = true;
 

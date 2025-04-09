@@ -16,7 +16,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             var msg = message as Otter.Models.FromSCO.dataNeeded;
             dataNeeded dataNeeded = new dataNeeded();
             dataNeeded.@params = new dataNeededParams();
-
+            bool foundPaymentMethod = false;
             if (msg.result.back && _otterState.Api_Active_Payment_Method is not null)
             {
                 payment goPayment = new payment();
@@ -30,9 +30,13 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             //TODO: Create a handler pattern for the different payment methods
 
-            if (_otterState.Api_Active_Payment_Method == "NETGIRO_TT")
+            if (_otterState.Api_Active_Payment_Method == "Netgiro_TT")
             {
-                var result = _adapter.PayForCurrentTransactionExternal("NETGIRO_TT", msg.result.data.Replace("-", ""), false).Result;
+                dataNeeded.@params.clearScreen = true;
+                dataNeeded.id = _otterState.Api_MessageId_Payment;
+                _otterProtocolHandler.SendMessage(dataNeeded);
+
+                var result = _adapter.PayForCurrentTransactionExternal("Netgiro_TT", msg.result.data.Replace("-", ""), false).Result;
 
                 if (result.ErrorList.Count() > 0)
                 {
@@ -50,9 +54,10 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     dataNeeded.error = result.ErrorList.First().ErrorMessage;
                     dataNeeded.id = _otterState.Api_MessageId_Payment;
                     _otterProtocolHandler.SendMessage(dataNeeded);
-                    
+
                     return;
                 }
+                foundPaymentMethod = true;
                 dataNeeded.@params.clearScreen = true;
                 dataNeeded.id = _otterState.Api_MessageId_Payment;
                 _otterProtocolHandler.SendMessage(dataNeeded);
@@ -61,14 +66,16 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             if (_otterState.Api_Active_Payment_Method == "22")
             {
-                var result = _adapter.PayForCurrentTransactionExternal("22", msg.result.data).Result;
+                var result = _adapter.PayForCurrentTransactionExternal("22", msg.result.data.Replace("-", "")).Result;
 
                 if (result.ErrorList.Count() > 0)
                 {
                     dataNeeded.@params = new dataNeededParams();
                     dataNeeded.@params.operatorMode = false;
                     dataNeeded.@params.titleText = "Pei";
-                    dataNeeded.@params.keyPad = false;
+                    dataNeeded.@params.keyPad = true;
+                    dataNeeded.@params.keyPadPattern = "####-####-####";
+                    dataNeeded.@params.minimalInputLength = 12;
                     dataNeeded.@params.deviceError = false;
                     dataNeeded.@params.exitButton = 1;
                     dataNeeded.@params.instructionsText = result.ErrorList.First().ErrorMessage;
@@ -82,7 +89,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.id = _otterState.Api_MessageId_Payment;
                 _otterProtocolHandler.SendMessage(dataNeeded);
                 _otterState.Api_MessageId_Payment = null;
-
+                foundPaymentMethod = true;
             }
             if (_otterState.Api_Active_Payment_Method == "40")
             {
@@ -93,16 +100,16 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     //TODO: Skítamix þarf að laga í BC
                     string error = result.ErrorList.First().ErrorMessage;
                     string errorMessage = "Villa við greiðslu";
-                    
+
                     if (error.Contains("Card is not found"))
                     {
                         errorMessage = "Kortið fannst ekki";
                     }
-                    if(error.Contains("is not enough for total amount"))
+                    if (error.Contains("is not enough for total amount"))
                     {
                         errorMessage = $"Ekki næg innegn á korti.";
                     }
-                    
+
                     dataNeeded.@params = new dataNeededParams();
                     dataNeeded.@params.operatorMode = false;
                     dataNeeded.@params.titleText = "Villa";
@@ -118,13 +125,26 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params.clearScreen = true;
                 dataNeeded.id = _otterState.Api_MessageId_Payment;
                 _otterProtocolHandler.SendMessage(dataNeeded);
-                
+                foundPaymentMethod = true;
                 _otterState.Api_MessageId_Payment = null;
             }
-            
+            if(!foundPaymentMethod)
+            {
+                _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.exitPayment
+                {
+                    result = new exitPaymentResult
+                    {
+                        successful = false,
+                        message = "Misræmi í greiðsluháttarskilgreiningum. Hafið samband við þjónustuborð."
+                    },
+                    id = _otterState.Api_MessageId
+                });
+                return;
+            }
+
             var postOutput = _adapter.FinishTransactionAsync().Result;
             
-            if(postOutput.ErrorList.Count() > 0)
+            if (postOutput.ErrorList.Count() > 0)
             {
                 _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.exitPayment
                 {
@@ -135,7 +155,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     },
                     id = _otterState.Api_MessageId
                 });
-                
+
             }
             else
             {
@@ -154,8 +174,6 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 _otterState.Reset();
 
             }
-
-
         }
     }
 }

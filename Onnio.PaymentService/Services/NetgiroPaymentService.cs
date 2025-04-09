@@ -33,60 +33,69 @@ namespace Onnio.PaymentService.Services
 
         public async Task<PaymentResultDto> ProcessPaymentAsync(PaymentRequestDto paymentRequest)
         {
-            InsertCartRequest request = new InsertCartRequest
+            try
             {
-                Amount = paymentRequest.Amount,
-                Reference = paymentRequest.Reference,
-                CustomerId = paymentRequest.CustomerId,
-                ConfirmationType = 0,
-                Description = ""
-            };
 
-            //Call the Netgiro API
-            var response = await MakeApiCallAsync("InsertCart", request);
-            
-            //Parse the response
-            InsertCartResult? result = JsonConvert.DeserializeObject<InsertCartResult>(response.Content.ReadAsStringAsync().Result, jsonSettings);
+                InsertCartRequest request = new InsertCartRequest
+                {
+                    Amount = paymentRequest.Amount,
+                    Reference = paymentRequest.Reference,
+                    CustomerId = paymentRequest.CustomerId,
+                    ConfirmationType = 0,
+                    Description = ""
+                };
 
-            if (!result.Success || !response.IsSuccessStatusCode)
-            {
-                return new PaymentResultDto { Success = false, Message = result.Message };
-            }
-            
-            int RetryInterval = result.ProcessCartCheckIntervalMiliseconds;
-            var checkCartRequest = new CheckCartRequest { TransactionId = result.TransactionId };
-            Stopwatch stopwatch = new Stopwatch();
-            TimeSpan timeLimit = TimeSpan.FromMinutes(1);
-
-            do
-            {
-                stopwatch.Start();
-                CheckCartResult? checkCartResult = null;
                 //Call the Netgiro API
-                response = await MakeApiCallAsync("CheckCart", checkCartRequest);
-                checkCartResult = JsonConvert.DeserializeObject<CheckCartResult>(response.Content.ReadAsStringAsync().Result, jsonSettings);
+                var response = await MakeApiCallAsync("InsertCart", request);
 
-                if (checkCartResult.PaymentSuccessful)
-                {
-                    return new PaymentResultDto { 
-                        Success = true, 
-                        Message = "Payment successful",
-                        PaymentAuthorization = checkCartResult.PaymentInfo.InvoiceNumber.ToString(),
+                //Parse the response
+                InsertCartResult? result = JsonConvert.DeserializeObject<InsertCartResult>(response.Content.ReadAsStringAsync().Result, jsonSettings);
 
-                    };
-                    
-                }
-                else
+                if (!result.Success || !response.IsSuccessStatusCode)
                 {
-                   Thread.Sleep(RetryInterval);
+                    return new PaymentResultDto { Success = false, Message = result.Message };
                 }
-                
+
+                int RetryInterval = result.ProcessCartCheckIntervalMiliseconds;
+                var checkCartRequest = new CheckCartRequest { TransactionId = result.TransactionId };
+                Stopwatch stopwatch = new Stopwatch();
+                TimeSpan timeLimit = TimeSpan.FromMinutes(1);
+
+                do
+                {
+                    stopwatch.Start();
+                    CheckCartResult? checkCartResult = null;
+                    //Call the Netgiro API
+                    response = await MakeApiCallAsync("CheckCart", checkCartRequest);
+                    checkCartResult = JsonConvert.DeserializeObject<CheckCartResult>(response.Content.ReadAsStringAsync().Result, jsonSettings);
+
+                    if (checkCartResult.PaymentSuccessful)
+                    {
+                        return new PaymentResultDto
+                        {
+                            Success = true,
+                            Message = "Payment successful",
+                            PaymentAuthorization = checkCartResult.PaymentInfo.InvoiceNumber.ToString(),
+
+                        };
+
+                    }
+                    else
+                    {
+                        Thread.Sleep(RetryInterval);
+                    }
+
+                }
+                while (stopwatch.Elapsed < timeLimit);
+
+                stopwatch.Stop();
+                var cancelCartResponse = await MakeApiCallAsync("CancelCart", result.TransactionId);
+                return new PaymentResultDto { Success = false, Message = "Hætt við greiðslu, samþykki barst ekki tímanlega." };
             }
-            while (stopwatch.Elapsed < timeLimit );
-            
-            stopwatch.Stop();
-            var cancelCartResponse = await MakeApiCallAsync("CancelCart", result.TransactionId);
-            return new PaymentResultDto { Success = false, Message = "Hætt við greiðslu, samþykki barst ekki tímanlega." };
+            catch (Exception ex)
+            {
+                return new PaymentResultDto { Success = false, Message = ex.Message };
+            }
 
         }
 
@@ -107,7 +116,7 @@ namespace Onnio.PaymentService.Services
             string signatureString = $"{parameters.AppKey}{timestamp}{parameters.Secret}";
 
             string json = JsonConvert.SerializeObject(payload, jsonSettings);
-           
+
             // Generate signature hash with SHA256
             string signature = NetgiroConnectionInfo.CalculateSignature(parameters.Secret, timestamp, url, json);
 

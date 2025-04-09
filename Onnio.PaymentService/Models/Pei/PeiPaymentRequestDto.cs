@@ -19,6 +19,6 @@ namespace Onnio.PaymentService.Models.Pei
         public string TenderTypeCode { get; set; }
         public string CustomerIdentifier { get; set; } = string.Empty;
         public string CardNumber { get; set; } = string.Empty;
-        public string ExtraInformation { get; set; } = string.Empty;
+        //public string ExtraInformation { get; set; } = string.Empty;
     }
 }

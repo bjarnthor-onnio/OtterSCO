@@ -36,8 +36,8 @@ namespace Onnio.PaymentService.Services
                 TotalAmount = request.Amount,
                 TenderTypeCode = request.TenderTypeId,
                 CurrencyCode = request.CurrencyCode ?? "ISK",
-                CardNumber = request.CustomerId,
-                ExtraInformation = "true"
+                CardNumber = request.CustomerId
+               
             };
 
             var json = JsonConvert.SerializeObject(peiPaymentRequest, jsonSettings);
