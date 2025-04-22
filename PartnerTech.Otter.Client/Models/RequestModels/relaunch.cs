@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class relaunch : Message
     {
-        public relaunchParams @params { get; set; }
+        public relaunchParams? @params { get; set; }
         public relaunch()
         {
             method = GetType().Name;
@@ -17,7 +17,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class relaunchParams : Params
     {
-        public string relaunch { get; set; }
+        public string? relaunch { get; set; }
     }
 
 }

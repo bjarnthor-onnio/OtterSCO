@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class customLOCloyalty : Message
     {
-        public customLOCloyaltyParams @params { get; set; }
+        public customLOCloyaltyParams? @params { get; set; }
         public customLOCloyalty()
         {
             method = GetType().Name;

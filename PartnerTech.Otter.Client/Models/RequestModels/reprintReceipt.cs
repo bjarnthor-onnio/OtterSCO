@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class reprintReceipt : Message
     {
-        public reprintReceiptParams @params { get; set; }
+        public reprintReceiptParams? @params { get; set; }
         public reprintReceipt()
         {
             method = GetType().Name;

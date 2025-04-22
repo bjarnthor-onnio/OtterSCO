@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class operatorValidation : Message
     {
-        public operatorValidationParams @params { get; set; }
+        public operatorValidationParams? @params { get; set; }
         public operatorValidation()
         {
             method = GetType().Name;
@@ -16,8 +16,8 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class operatorValidationParams : Params
     {
-        public string operatorId { get; set; }
-        public string password { get; set; }
-        public string key { get; set; }
+        public string? operatorId { get; set; }
+        public string? password { get; set; }
+        public string? key { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class enterAssistMode : Message
     {
-        public enterAssistModeParams @params { get; set; }
+        public enterAssistModeParams? @params { get; set; }
         public enterAssistMode()
         {
             method = GetType().Name;
@@ -17,7 +17,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class enterAssistModeParams : Params
     {
-        public string shutdown { get; set; }
+        public string? shutdown { get; set; }
     }
 
 }

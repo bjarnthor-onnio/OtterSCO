@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class markdown : Message
     {
-        public markdownParams @params { get; set; }
+        public markdownParams? @params { get; set; }
         public markdown()
         {
             method = GetType().Name;
@@ -16,7 +16,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class markdownParams : Params
     {
-        public string barcode { get; set; }
+        public string? barcode { get; set; }
         public int productId { get; set; }
     }
 

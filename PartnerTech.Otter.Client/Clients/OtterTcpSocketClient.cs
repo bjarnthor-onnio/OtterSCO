@@ -1,5 +1,5 @@
-﻿using LS.SCO.Interfaces.Log;
-using PartnerTech.Otter.Client.Interface;
+﻿using PartnerTech.Otter.Client.Interface;
+using PartnerTech.Otter.Client.Models;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,9 +10,8 @@ namespace PartnerTech.Otter.Client.Clients
 
     public class OtterTcpSocketClient : IOtterTcpSocketClient
 	{
-        protected readonly ILogManager _logService;
-        private readonly ILogManager _logManager;
-		private TcpClient _client;
+        
+		private TcpClient? _client;
 		public Action<string> DataReceived { get; set; }
 		public Action Connected { get; set; }
 		public Action Disconnected { get; set; }
@@ -30,11 +29,8 @@ namespace PartnerTech.Otter.Client.Clients
 		//const string msgPattern = @"([\d]*?)#{([\s\S]*?)jsonrpc([\s\S]*?)method(([\s\S]*?)(params|result)([\s\S]*?){([\s\S]*?)}([\s\S]*?)?)([\s\S]*?)}";
 		const string msgPattern = @"[0-9]+\#({[\s\S]*?})(?=[0-9]+\#|$)";
 
-        public OtterTcpSocketClient(ILogManager logService, ILogManager logManager)
+        public OtterTcpSocketClient()
 		{
-            _logService = logService;
-            _logManager = logManager;
-
             _buffer = new List<byte>();
 		}
 
@@ -49,11 +45,11 @@ namespace PartnerTech.Otter.Client.Clients
 			{
 				try
 				{
-					_logService.LogInfo($"Otter Socket Client - Tcp socket Connecting {server}:{port}");
+					//_logService.LogInfo($"Otter Socket Client - Tcp socket Connecting {server}:{port}");
 					_client.Client.Connect(server, port);
 
-					_logService.LogInfo($"Otter Socket Client - Tcp socket is {(_client.Connected? "connected" : "not connected" )} "+
-						$"to {server}:{port}");
+					//_logService.LogInfo($"Otter Socket Client - Tcp socket is {(_client.Connected? "connected" : "not connected" )} "+
+					//	$"to {server}:{port}");
 
 					if (_client.Connected)
 					{
@@ -72,7 +68,7 @@ namespace PartnerTech.Otter.Client.Clients
                 }
 				catch (SocketException se)
 				{
-                    _logService.LogError($"Otter Socket Client - Tcp socket exception {se.ErrorCode} - {se.Message}");
+                    //_logService.LogError($"Otter Socket Client - Tcp socket exception {se.ErrorCode} - {se.Message}");
 					if(_connectionStatus)
 					{
 						_connectionStatus = false;
@@ -88,7 +84,7 @@ namespace PartnerTech.Otter.Client.Clients
                 }
 				catch (Exception e)
 				{
-					_logService.LogError($"Otter Socket Client - Exception {e.Message}");
+					//_logService.LogError($"Otter Socket Client - Exception {e.Message}");
                     if (_client.Client.IsBound)
                     {
                         _client.Client.Shutdown(SocketShutdown.Both);
@@ -110,8 +106,8 @@ namespace PartnerTech.Otter.Client.Clients
 			try
 			{
 
-				StateObject stateObject = (StateObject)ar.AsyncState;
-				Socket client = stateObject.workSocket;
+				StateObject? stateObject = (StateObject)ar.AsyncState;
+				Socket? client = stateObject.workSocket;
                 string strContent = string.Empty;
 
                 if(!client.Connected)
@@ -129,7 +125,7 @@ namespace PartnerTech.Otter.Client.Clients
 					if (bytesRead > 4) //If bytesRead is bigger than 4, message is coming from SCOT with XML message and length
 					{
 						strContent = Encoding.GetEncoding("iso-8859-2").GetString(stateObject.buffer, 0, bytesRead);
-                        _logService.LogInfo($"Otter Socket Client - Buffer data received \n{strContent}");
+                        //_logService.LogInfo($"Otter Socket Client - Buffer data received \n{strContent}");
 
 						var match = Regex.Match(strContent, msgPattern);
 						if (match.Success)
@@ -148,7 +144,7 @@ namespace PartnerTech.Otter.Client.Clients
 
                                 if (strContentToSend.Length > 0)
 								{
-									_logService.LogInfo($"Otter Socket Client - Message received (length {strLength}) \n{strContentToSend}");
+									//_logService.LogInfo($"Otter Socket Client - Message received (length {strLength}) \n{strContentToSend}");
 									DataReceived?.Invoke(strContentToSend);
 								}
 
@@ -171,7 +167,7 @@ namespace PartnerTech.Otter.Client.Clients
 					}
 					catch(Exception e)
 					{
-						_logService.LogInfo("Connection lost?");
+						//_logService.LogInfo("Connection lost?");
 						throw;
 					}
 					
@@ -214,7 +210,7 @@ namespace PartnerTech.Otter.Client.Clients
 			{
 				_client.Client.SendAsync(message, SocketFlags.None);
 
-				_logService.LogInfo($"Otter Socket Client - Message sent \n{Encoding.ASCII.GetString(message, 0, message.Length)}");
+				//_logService.LogInfo($"Otter Socket Client - Message sent \n{Encoding.ASCII.GetString(message, 0, message.Length)}");
 			}
 		}
 		public void Disconnect()
@@ -274,7 +270,6 @@ namespace PartnerTech.Otter.Client.Clients
 
 		private static bool IsEndFrame(byte @byte, List<byte> buffer)
 		{
-			//return @byte == ProtocolCharacter.ETX && buffer.Count > 3;
 			return @byte == ProtocolCharacter.ETX && buffer.Count > 3;
 		}
 

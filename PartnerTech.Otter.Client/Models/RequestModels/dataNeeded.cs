@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class dataNeeded : Message
     {
-        public dataNeededResult result { get; set; }
+        public dataNeededResult? result { get; set; }
         public dataNeeded()
         {
             method = GetType().Name;
@@ -18,8 +18,8 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
     public class dataNeededResult : Result
     {
         public bool back { get; set; }
-        public string data { get; set; }
-        public string buttonId { get; set; }
+        public string? data { get; set; }
+        public string? buttonId { get; set; }
     }
 
 }

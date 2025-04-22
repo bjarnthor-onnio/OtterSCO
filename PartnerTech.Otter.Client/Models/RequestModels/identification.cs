@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class identification : Message
     {
-        public identificationParams @params { get; set; }
+        public identificationParams? @params { get; set; }
         public identification()
         {
             method = GetType().Name;
@@ -16,7 +16,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class identificationParams : Params
     {
-        public string barcode { get; set; }
+        public string? barcode { get; set; }
 
     }
 

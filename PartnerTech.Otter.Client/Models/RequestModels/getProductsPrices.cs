@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class getProductsPrices : Message
     {
-        public getProductsPricesParams @params { get; set; }
+        public getProductsPricesParams? @params { get; set; }
         public getProductsPrices()
         {
             method = GetType().Name;
@@ -17,7 +17,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class getProductsPricesParams : Params
     {
-        public List<string> barcodes { get; set; }
+        public List<string>? barcodes { get; set; }
     }
 
 }

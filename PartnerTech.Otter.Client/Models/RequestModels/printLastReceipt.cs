@@ -9,7 +9,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class printLastReceipt : Message
     {
-        public printLastReceiptParams @params { get; set; }
+        public printLastReceiptParams? @params { get; set; }
         public printLastReceipt()
         {
             method = GetType().Name;

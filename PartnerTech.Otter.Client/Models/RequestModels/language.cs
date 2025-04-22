@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class language : Message
     {
-        public LanguageParams @params { get; set; }
+        public LanguageParams? @params { get; set; }
         public language()
         {
             method = GetType().Name;
@@ -17,7 +17,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class LanguageParams : Params
     {
-        public string language { get; set; }
+        public string? language { get; set; }
     }
 
 }

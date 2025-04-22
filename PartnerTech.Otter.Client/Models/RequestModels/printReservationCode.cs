@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class printReservationCode : Message
     {
-        public printReservationCodeParams @params { get; set; }
+        public printReservationCodeParams? @params { get; set; }
         public printReservationCode()
         {
             method = GetType().Name;
@@ -16,7 +16,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class printReservationCodeParams : Params
     {
-        public string code { get; set; }
+        public string? code { get; set; }
     }
 
 }

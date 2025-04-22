@@ -1,11 +1,7 @@
-﻿using System;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using LS.SCO.Plugin.Adapter.Otter.Models;
-using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
+﻿using PartnerTech.Otter.Client.Models.BaseModels;
+using PartnerTech.Otter.Client.Models.ResponseModels;
 
-public interface IOtterProtocolHandler
+public interface IOtterService
 {
     // Methods for connecting
     void ConnectToSCO(string address, int port);

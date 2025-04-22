@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class company : Message
     {
-        public companyParams @params { get; set; }
+        public companyParams? @params { get; set; }
         public company()
         {
             method = GetType().Name;
@@ -17,7 +17,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class companyParams : Params
     {
-        public string identifier { get; set; }
+        public string? identifier { get; set; }
     }
 
 }

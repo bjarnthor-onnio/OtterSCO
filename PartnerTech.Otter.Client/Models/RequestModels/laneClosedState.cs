@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class laneClosedState : Message
     {
-        public laneClosedStateParams @params { get; set; }
+        public laneClosedStateParams? @params { get; set; }
         public laneClosedState()
         {
             method = GetType().Name;

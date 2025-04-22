@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class goPayment : Message
     {
-        public goPaymentParams @params { get; set; }
+        public goPaymentParams? @params { get; set; }
         public goPayment()
         {
             method = GetType().Name;

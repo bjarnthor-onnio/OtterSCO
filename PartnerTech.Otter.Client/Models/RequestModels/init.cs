@@ -5,9 +5,9 @@ using PartnerTech.Otter.Client.Models.BaseModels;
 
 namespace PartnerTech.Otter.Client.Models.RequestModels
 {
-    internal class Init : Message
+    public class Init : Message
     {
-        public InitResult result { get; set; }
+        public InitResult? result { get; set; }
         public Init() 
         {
             method = GetType().Name;

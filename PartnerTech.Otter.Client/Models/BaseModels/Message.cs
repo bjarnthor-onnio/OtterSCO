@@ -8,10 +8,10 @@ namespace PartnerTech.Otter.Client.Models.BaseModels
 
     public class Message
     {
-        public string jsonrpc { get; set; }
-        public string method { get; set; }
-        public string id { get; set; }
-        public string error { get; set; }
+        public string? jsonrpc { get; set; } = "2.0";
+        public string? method { get; set; }
+        public string? id { get; set; }
+        public string? error { get; set; }
 
 
         public string ToJson()
@@ -21,11 +21,6 @@ namespace PartnerTech.Otter.Client.Models.BaseModels
                 NullValueHandling = NullValueHandling.Ignore
             };
             return JsonConvert.SerializeObject(this, sett);
-        }
-
-        public Message()
-        {
-            jsonrpc = "2.0";
         }
 
     }
@@ -38,7 +33,7 @@ namespace PartnerTech.Otter.Client.Models.BaseModels
     public class Result
     {
         public bool successful { get; set; }
-        public string message { get; set; }
+        public string? message { get; set; }
     }
 
 

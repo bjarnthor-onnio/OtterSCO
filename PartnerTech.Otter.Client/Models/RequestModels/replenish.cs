@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class replenish : Message
     {
-        public replenishParams @params { get; set; }
+        public replenishParams? @params { get; set; }
         public replenish()
         {
             method = GetType().Name;
@@ -16,7 +16,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class replenishParams : Params
     {
-        public int amount { get; set; }
+        public int? amount { get; set; }
     }
 
 }

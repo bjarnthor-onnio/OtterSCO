@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class changeProductQuantity : Message
     {
-        public changeProductQuantityParams @params { get; set; }
+        public changeProductQuantityParams? @params { get; set; }
         public changeProductQuantity()
         {
             method = GetType().Name;
@@ -16,7 +16,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class changeProductQuantityParams : Params
     {
-        public string barcode { get; set; }
+        public string? barcode { get; set; }
         public int productId { get; set; }
         public int quantity { get; set; }
         public int currentQuantity { get; set; }

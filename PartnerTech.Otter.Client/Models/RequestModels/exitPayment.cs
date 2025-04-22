@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class exitPayment : Message
     {
-        public exitPaymentParams @params { get; set; }
+        public exitPaymentParams? @params { get; set; }
         public exitPayment()
         {
             method = GetType().Name;

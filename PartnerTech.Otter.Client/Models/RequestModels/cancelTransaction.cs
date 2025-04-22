@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class cancelTransaction : Message
     {
-        public cancelTransactionParams @params { get; set; }
+        public cancelTransactionParams? @params { get; set; }
         public cancelTransaction()
         {
             method = GetType().Name;
@@ -16,7 +16,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class cancelTransactionParams : Params
     {
-        public string transactionId { get; set; }
+        public string? transactionId { get; set; }
     }
 
 }

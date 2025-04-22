@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class enterPOSCode : Message
     {
-        public enterPOSCodeParams @params { get; set; }
+        public enterPOSCodeParams? @params { get; set; }
         public enterPOSCode()
         {
             method = GetType().Name;

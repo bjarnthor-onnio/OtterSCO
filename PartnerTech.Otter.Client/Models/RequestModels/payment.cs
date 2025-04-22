@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class payment : Message
     {
-        public paymentParams @params { get; set; }
+        public paymentParams? @params { get; set; }
         public payment()
         {
             method = GetType().Name;
@@ -17,7 +17,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class paymentParams : Params
     {
-        public string type { get; set; }
+        public string? type { get; set; }
         public int amount { get; set; }
 
     }

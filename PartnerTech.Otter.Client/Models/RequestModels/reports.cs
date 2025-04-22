@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class reports : Message
     {
-        public ReportsParams @params { get; set; }
+        public ReportsParams? @params { get; set; }
         public reports() 
         {
             method = GetType().Name;

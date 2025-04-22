@@ -7,7 +7,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 {
     public class loyalty : Message
     {
-        public LoyaltyParams @params { get; set; }
+        public LoyaltyParams? @params { get; set; }
         public loyalty()
         {
             method = GetType().Name;
@@ -17,7 +17,7 @@ namespace PartnerTech.Otter.Client.Models.RequestModels
 
     public class LoyaltyParams : Params
     {
-        public string identifier { get; set; }
+        public string? identifier { get; set; }
     }
 
 }
