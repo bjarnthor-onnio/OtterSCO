@@ -13,6 +13,11 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
         public async override void Handle(object message)
         {
+
+            //TODO: Create a flow to handle all payments by routing them to the correct utility
+            //TODO: Handle payment errors and log
+            //TODO: 
+
             var msg = (Otter.Models.FromSCO.payment)message;
             _otterState.Api_MessageId = msg.id;
             if (_otterState.Pos_BalanceAmount == 0)
@@ -57,7 +62,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     _otterEventsManager.sendTransactionFinish();
                 }
             }
-
+            //TODO:Fix this nonsense
             if (msg.@params.type != "3")
             {
                 ExternalPayments(msg);

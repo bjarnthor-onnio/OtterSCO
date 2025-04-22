@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LS.SCO.Plugin.Adapter", "LS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LS.SCO.Plugin.Service", "LS.SCO.Plugin.Service\LS.SCO.Plugin.Service.csproj", "{C0F05420-1E55-4F5F-97AB-82EDE0900331}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LS.SCO.Plugin.WpfDeviceSimulator", "LS.SCO.Plugin.WpfDeviceSimulator\LS.SCO.Plugin.WpfDeviceSimulator.csproj", "{06B23BB7-3C82-46DA-8DE7-41CECB9FF97E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onnio.PaymentService", "Onnio.PaymentService\Onnio.PaymentService.csproj", "{6E501B76-6143-40FD-B5CF-A44FF5420ED7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onnio.BcIntegrator", "Onnio.BcIntegrator\Onnio.BcIntegrator.csproj", "{B83AD80C-BFC0-46FB-8B7F-CC152E29A031}"
@@ -21,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerTech.Otter.Client", "PartnerTech.Otter.Client\PartnerTech.Otter.Client.csproj", "{AFAD0F40-2F53-4085-BC67-AAFB7EC81D17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,10 +36,6 @@ Global
 		{C0F05420-1E55-4F5F-97AB-82EDE0900331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F05420-1E55-4F5F-97AB-82EDE0900331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0F05420-1E55-4F5F-97AB-82EDE0900331}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06B23BB7-3C82-46DA-8DE7-41CECB9FF97E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06B23BB7-3C82-46DA-8DE7-41CECB9FF97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06B23BB7-3C82-46DA-8DE7-41CECB9FF97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06B23BB7-3C82-46DA-8DE7-41CECB9FF97E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E501B76-6143-40FD-B5CF-A44FF5420ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E501B76-6143-40FD-B5CF-A44FF5420ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E501B76-6143-40FD-B5CF-A44FF5420ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -56,6 +52,10 @@ Global
 		{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ED6FF41-1798-4FF8-9E54-3F9D216B835A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFAD0F40-2F53-4085-BC67-AAFB7EC81D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFAD0F40-2F53-4085-BC67-AAFB7EC81D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFAD0F40-2F53-4085-BC67-AAFB7EC81D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFAD0F40-2F53-4085-BC67-AAFB7EC81D17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
