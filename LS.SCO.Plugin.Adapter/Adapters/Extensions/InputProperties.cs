@@ -28,12 +28,12 @@ namespace LS.SCO.Plugin.Adapter.Adapters.Extensions
             var sampleAdapter = (SamplePosAdapter)adapter;
             var config = StaticServiceAdapter.GetBcConfig();
 
-            if (input != null && sampleAdapter?.Configuration != null)
+            if (input != null && sampleAdapter?.AdapterConfiguration != null)
             {
-                input.Token = sampleAdapter?.Configuration.Token;
-                input.StoreId = sampleAdapter?.Configuration.StoreId;
-                input.TerminalId = sampleAdapter?.Configuration.TerminalId;
-                input.StaffId = sampleAdapter?.Configuration.StaffId ?? config.StaffId;
+                input.Token = sampleAdapter?.AdapterConfiguration.Token;
+                input.StoreId = sampleAdapter?.AdapterConfiguration.StoreId;
+                input.TerminalId = sampleAdapter?.AdapterConfiguration.TerminalId;
+                input.StaffId = sampleAdapter?.AdapterConfiguration.StaffId ?? config.StaffId;
             }
         }
     }

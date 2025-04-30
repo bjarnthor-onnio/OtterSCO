@@ -45,21 +45,6 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             return device;
         }
 
-        /// <summary>
-        /// Checks if the configurations were properly filled
-        /// </summary>
-        /// <exception cref="Exception"></exception>
-        private void ValidateConfigurations()
-        {
-            if (this.AdapterConfiguration.IsNullOrEmpty())
-            {
-                string message = $"Configuration file Missing: AppSetting.{{{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")}}}.json";
-
-                this._logManager.LogError(message);
-
-                throw new Exception(message);
-            }
-        }
 
         /// <summary>
         /// Creates SetCardEntryInputDto
@@ -112,7 +97,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         private async Task<AddToTransOutputDto> AddPaymentLineToTransaction(string tenderType, EFTRequestInputDto input)
         {
             var tenderInput = this._mapper.Map<EFTRequestInputDto, AddToTransInputDto>(input);
-            tenderInput.Data.ForceFinalPrice = true;
+            
             tenderInput.Data ??= new AddToTransInputDataDto();
             tenderInput.Data.Code = tenderType;
 

@@ -11,6 +11,8 @@ using Onnio.PaymentService;
 using Onnio.PaymentService.Models;
 
 using LS.SCO.Entity.DTO.SCOService.AddToTransaction;
+using LS.SCO.Entity.DTO.HardwareStation.Output;
+using LS.SCO.Entity.DTO.HardwareStation;
 
 
 namespace LS.SCO.Plugin.Service.Services
@@ -45,6 +47,10 @@ namespace LS.SCO.Plugin.Service.Services
         {
             return true;
         }
+        protected override Task ModifyPaymentResult(EFTRequestInputDto input, EFTRequestOutputDto purchaseResult, string tenderType)
+        {
+            return base.ModifyPaymentResult(input, purchaseResult, tenderType);
+        }
 
         public PaymentResultDto ProcessExternalPayment(PaymentRequestDto request)
         {
@@ -52,6 +58,7 @@ namespace LS.SCO.Plugin.Service.Services
             var response  = _onnioPaymentService.ProcessPaymentAsync(request).Result as PaymentResultDto;
             return response;
         }
+
         public bool TriggerLobicoEvent(string receiptId)
         {
             return _onnioPaymentService.AppPaymentService.TriggerAppPaymentStateChangeAsync(receiptId).Result;

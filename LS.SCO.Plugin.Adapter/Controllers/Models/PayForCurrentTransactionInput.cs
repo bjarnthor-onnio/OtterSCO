@@ -4,6 +4,6 @@
     {
         public decimal Value { get; set; }
         public string TenderType { get; set; }
-        public string CustomerId { get; set; }
+        
     }
 }

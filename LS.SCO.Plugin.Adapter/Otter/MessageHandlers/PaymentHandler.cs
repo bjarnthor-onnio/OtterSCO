@@ -64,7 +64,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 return;
             }
 
-            var prePay = await _adapter.PreparePaymentAsync();
+            /*var prePay = await _adapter.PreparePaymentAsync();
 
             if (prePay.ErrorList?.Count() > 0)
             {
@@ -80,7 +80,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 });
                 _otterState.Api_MessageId = null;
                 return;
-            }
+            }*/
 
             var pay = _adapter.PayForCurrentTransaction((long)_otterState.Pos_BalanceAmount, msg.@params.type).Result;
 
