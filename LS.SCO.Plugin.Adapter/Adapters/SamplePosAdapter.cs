@@ -11,26 +11,21 @@ using LS.SCO.Entity.DTO.SCOService.TerminalSettings;
 using LS.SCO.Entity.Enums;
 using LS.SCO.Entity.Extensions;
 using LS.SCO.Helpers.Extensions;
-using System.Linq;
 using LS.SCO.Interfaces.Adapter;
 using LS.SCO.Interfaces.Cache;
 using LS.SCO.Interfaces.Log;
 using LS.SCO.Interfaces.Services.Configuration;
 using LS.SCO.Interfaces.Services.Validation;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
-using LS.SCO.Plugin.Adapter.Controllers.Models;
 using LS.SCO.Plugin.Service.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using GetItemDetailsOutputDto = LS.SCO.Entity.DTO.SCOService.GetItemDetails.GetItemDetailsOutputDto;
 using LS.SCO.Entity.DTO.SCOService.VoidTransaction;
 using LS.SCO.Entity.DTO.SCOService.CancelActiveTransaction;
-using LS.SCO.Entity.DTO.SCOService.Items;
 using LS.SCO.Entity.DTO.SCOService.StaffLogon;
 using LS.SCO.Entity.DTO.SCOService.VoidItem;
 using Onnio.PaymentService.Models;
 using LS.SCO.Entity.ErrorManagement;
-using LS.SCO.Entity.Base;
-using Onnio.PaymentService.Services;
 using Onnio.ConfigService.Interface;
 using LS.SCO.Entity.DTO.SCOService.PrintPreviousTransaction;
 using LS.SCO.Entity.DTO.SCOService.CalculateBasket;
@@ -55,6 +50,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         private readonly IServiceProvider _services;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfigurationService _configService;
+        private readonly IOtterService _otterService;
 
         public List<BaseAdapterConfiguration> AdapterConfiguration { get; set; } = new List<BaseAdapterConfiguration>();
 
@@ -88,7 +84,8 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             ILogManager logManager,
             IServiceProvider services,
             IHttpClientFactory httpClientFactory,
-            IConfigurationService configService)
+            IConfigurationService configService,
+            IOtterService otterService)
         {
             this._mapper = mapper;
             this._logService = logService;
@@ -99,6 +96,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             this._services = services;
             this._posService = (ISamplePosServiceDisabled)this._services.GetService<ISamplePosService>();
             this._httpClientFactory = httpClientFactory;
+            this._otterService = otterService;
 
 
             this._cancellationTokenSource = new CancellationTokenSource();
@@ -174,7 +172,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         public void StartMonitoringAsync(CancellationToken cancellationToken)
         {
             this._posService = this._services.GetService<ISamplePosService>() as ISamplePosServiceDisabled;
-            ConnectoToOtterSCO();
+            ConnectoToSco();
         }
 
         /// <summary>

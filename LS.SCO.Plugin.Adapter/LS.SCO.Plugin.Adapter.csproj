@@ -17,6 +17,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Otter\**" />
+	  <EmbeddedResource Remove="Otter\**" />
+	  <None Remove="Otter\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.0" />
 		<PackageReference Include="LS.SelfCheckout.Connector.Plugin" Version="1.11.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
@@ -30,6 +36,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LS.SCO.Plugin.Service\LS.SCO.Plugin.Service.csproj" />
+		<ProjectReference Include="..\PartnerTech.Otter.Client\PartnerTech.Otter.Client.csproj" />
 	</ItemGroup>
 
 </Project>
