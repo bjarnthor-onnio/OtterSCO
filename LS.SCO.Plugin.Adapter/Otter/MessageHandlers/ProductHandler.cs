@@ -34,12 +34,14 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
             var itemDetails = await _adapter.GetItemDetailAsync(input);
             bool isCoupon = false;
+            string couponBarCode = string.Empty;
 
             if (itemDetails.ErrorList?.Count() > 0)
             {
                 if(itemDetails.ErrorList.First().ErrorMessage.ToLower().Contains("coupon"))
                 {
                     isCoupon = true;
+                    couponBarCode = msg.@params.barcode;
                 }
                 else
                 {
@@ -157,8 +159,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
                     return;
                 }
-            }
 
+            }
             //TODO Check if time restricted
             decimal weight = msg.@params.weight > 0 ? (decimal)msg.@params.weight : 0;
 
@@ -178,8 +180,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
             Console.WriteLine("################   SECURITY MODE: " + securityMode);
 
-
-            var addItem = _adapter.AddItemToTransaction(itemDetails.BarCode, itemDetails.ItemNo, _otterState.Pos_TransactionId, qty, isCoupon).Result;
+            string barCode = couponBarCode != string.Empty ? couponBarCode : itemDetails.BarCode;
+            var addItem = _adapter.AddItemToTransaction(barCode, itemDetails.ItemNo, _otterState.Pos_TransactionId, qty, isCoupon).Result;
            
             if (addItem.ErrorList?.Count() > 0)
             {

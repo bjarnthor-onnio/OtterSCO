@@ -175,7 +175,12 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             return result;
         }
-
+        public async Task<AddToTransOutputDto> AddToTransaction(AddToTransInputDto input)
+        {
+            var result =  await _posService.AddToTransactionAsync(input);
+            return result;
+            
+        }
         /// <summary>
         /// Adds an item to the current transaction.
         /// </summary>
@@ -190,14 +195,16 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             input.Data.Quantity = qty;
 
             input.ConfigureBaseInputProperties(this);
-            
+            AddToTransOutputDto result = null;
             if(isCoupon)
             {
                 input.Data.EntryType = 6;
+                result = await _posService.AddToTransactionAsync(input);
             }
-            
-            var result = await this._posService.AddItemAsync(input);
-                
+            else
+            {
+                result = await this._posService.AddItemAsync(input);
+            }
 
             if (result != null && result.Result == "IFC_OK")
             {
@@ -232,7 +239,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         }
         public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, string customerId = "", bool skipPaymentLine = true)
         {
-            EFTRequestOutputDto sessionResult = null;
+            //EFTRequestOutputDto sessionResult = null;
             GetCurrentTransactionOutputDto currentTransaction = await GetCurrentTransaction();
 
 
@@ -321,7 +328,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         /// <returns></returns>
         public async Task<BaseOutputEntity> PayForCurrentTransaction(decimal amount, string tenderType)
         {
-                var serviceInput = new EFTRequestInputDto(EFTRequestType.Purchase)
+               /* var serviceInput = new EFTRequestInputDto(EFTRequestType.Purchase)
                 {
                     AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
                     {
@@ -352,8 +359,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                             ErrorMessage = result.Message
                         }
                     }
-                };
-            /*
+                };*/
             EFTRequestOutputDto sessionResult = null;
             try
             {
@@ -425,7 +431,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
                 if (this._cancellationTokenSource?.Token.IsCancellationRequested ?? false)
                     this._cancellationTokenSource.TryReset();
-            }*/
+            }
         }
         /*public async Task<PreparePaymentOutputDto> PreparePaymentAsync()
         {

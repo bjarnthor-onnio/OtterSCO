@@ -103,7 +103,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             tenderInput.CopyBaseIdentification(input);
             
-            var tenderOutput =  _posService.AddTenderAsync(tenderInput).Result;
+            var tenderOutput =  _posService.AddTenderAsync(tenderInput, input.AmountBreakdown.TotalAmount).Result;
 
             return tenderOutput;
         }
