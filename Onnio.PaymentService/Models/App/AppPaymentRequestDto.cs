@@ -26,7 +26,7 @@ namespace Onnio.PaymentService.Models.App
 
         public string CardNumber { get; set; } = string.Empty;
 
-        public string ExtraInformation { get; set; } = string.Empty;
+        //public string ExtraInformation { get; set; } = string.Empty;
 
 
     }
