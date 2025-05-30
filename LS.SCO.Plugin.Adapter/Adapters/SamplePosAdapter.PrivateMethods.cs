@@ -19,32 +19,6 @@ namespace LS.SCO.Plugin.Adapter.Adapters
     /// </summary>
     public partial class SamplePosAdapter
     {
-        /// <summary>
-        /// Fills an object
-        /// </summary>
-        /// <param name="service"></param>
-        /// <returns></returns>
-        private BaseAdapterConfiguration FillAdapterConfiguration(ScoDeviceDto service, TerminalSettings settings, string staffId = "")
-        {
-            var device = new BaseAdapterConfiguration();
-
-            foreach (var property in device.GetType().GetProperties())
-            {
-                if (property.PropertyType == typeof(string))
-                    property.SetValue(device, service?.FeatureFlags?.GetFeatureFlagValueByName(property.Name));
-
-                if (property.PropertyType == typeof(int))
-                    property.SetValue(device, int.TryParse(service?.FeatureFlags?.GetFeatureFlagValueByName(property.Name) ?? "0", out int number) ? number : number);
-            }
-
-            device.TerminalId = service.TerminalId; //device
-            device.StaffId = staffId; //from get terminal settings
-            device.StoreId = settings.StoreId; //config file
-            device.Token = settings.Token; //config file
-
-            return device;
-        }
-
 
         /// <summary>
         /// Creates SetCardEntryInputDto

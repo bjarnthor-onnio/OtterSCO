@@ -54,7 +54,6 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         private readonly IServiceProvider _services;
         private readonly IMapper _mapper;
         private readonly IHttpClientFactory _httpClientFactory;
-
         private readonly IConfigurationService _configService;
 
         public BaseAdapterConfiguration AdapterConfiguration { get; set; }
@@ -200,6 +199,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             {
                 input.Data.EntryType = 6;
                 result = await _posService.AddToTransactionAsync(input);
+                
             }
             else
             {
@@ -237,9 +237,8 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             return result;
         }
-        public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, string customerId = "", bool skipPaymentLine = true)
+        public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, decimal? amount, string customerId = "", bool skipPaymentLine = true)
         {
-            //EFTRequestOutputDto sessionResult = null;
             GetCurrentTransactionOutputDto currentTransaction = await GetCurrentTransaction();
 
 
@@ -300,7 +299,6 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                     AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
                     {
                         TotalAmount = currentTransaction.Transaction.BalanceAmountWithTax//Convert.ToDecimal(amount) / 100,
-
                     },
                     TenderType = tenderType
                 };
@@ -433,14 +431,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                     this._cancellationTokenSource.TryReset();
             }
         }
-        /*public async Task<PreparePaymentOutputDto> PreparePaymentAsync()
-        {
-            var input = new PreparePaymentInputDto();
-            input.ConfigureBaseInputProperties(this);
-
-            var result = await this._posService.PreparePaymentAsync(input);
-            return result;
-        }*/
+       
         /// <summary>
         /// Finishes the current transaction.
         /// </summary>
@@ -537,21 +528,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             return result;
         }
-        public async Task<bool> GetPaymentFromExternalProvider(string test)
-        {
-            var client = _httpClientFactory.CreateClient();
-            HttpResponseMessage message = await client.GetAsync("https://catfact.ninja/fact");
-            if (message.IsSuccessStatusCode)
-            {
-                var response = await message.Content.ReadAsStringAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+       
         public StaffLogonOutputDto StaffLogon(string operatorId, string password)
         {
             var input = new StaffLogonInputDto();

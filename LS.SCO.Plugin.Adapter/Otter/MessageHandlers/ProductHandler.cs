@@ -1,6 +1,7 @@
 ﻿using LS.SCO.Entity.DTO.SCOService.AddToTransaction;
 using LS.SCO.Entity.DTO.SCOService.GetItemDetails;
 using LS.SCO.Entity.DTO.SCOService.Items;
+using LS.SCO.Entity.DTO.Toshiba.Pos;
 using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
 using LS.SCO.Plugin.Adapter.Otter.Extensions;
@@ -182,7 +183,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
             string barCode = couponBarCode != string.Empty ? couponBarCode : itemDetails.BarCode;
             var addItem = _adapter.AddItemToTransaction(barCode, itemDetails.ItemNo, _otterState.Pos_TransactionId, qty, isCoupon).Result;
-           
+            
             if (addItem.ErrorList?.Count() > 0)
             {
                 Console.WriteLine("################   ERROR DURING Add Item To Transaction at LsCentral");
@@ -190,6 +191,12 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             else
             {
+                if(!isCoupon)
+                {
+                    var total = _adapter.CalculateTotals().Result;
+                }
+                
+
                 SaleItemDto saleItem = addItem.Transaction.SaleItems?.OrderBy(x => x.LineNr).Last();
                 var product = ProductHelper.PopulateProduct(saleItem);
                 

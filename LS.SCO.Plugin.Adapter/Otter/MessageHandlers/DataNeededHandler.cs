@@ -1,6 +1,7 @@
 ﻿using LS.SCO.Entity.DTO.DieboldNixdorf.Pos;
 using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
+using LS.SCO.Plugin.Adapter.Otter.Models;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -36,7 +37,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.id = _otterState.Api_MessageId_Payment;
                 _otterProtocolHandler.SendMessage(dataNeeded);
 
-                var result = _adapter.PayForCurrentTransactionExternal("Netgiro_TT", msg.result.data.Replace("-", ""), false).Result;
+                var result = _adapter.PayForCurrentTransactionExternal("Netgiro_TT", _otterState.Pos_BalanceAmount,msg.result.data.Replace("-", ""), false).Result;
 
                 if (result.ErrorList.Count() > 0)
                 {
@@ -66,7 +67,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             if (_otterState.Api_Active_Payment_Method == "22")
             {
-                var result = _adapter.PayForCurrentTransactionExternal("22", msg.result.data.Replace("-", "")).Result;
+                var result = _adapter.PayForCurrentTransactionExternal("22", _otterState.Pos_BalanceAmount,msg.result.data.Replace("-", "")).Result;
 
                 if (result.ErrorList.Count() > 0)
                 {
@@ -93,7 +94,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             if (_otterState.Api_Active_Payment_Method == "40")
             {
-                var result = _adapter.PayForCurrentTransactionExternal("40", msg.result.data).Result;
+                
+                var result = _adapter.PayForCurrentTransactionExternal("40", _otterState.Pos_BalanceAmount,msg.result.data).Result;
 
                 if (result.ErrorList.Count() > 0)
                 {
@@ -128,6 +130,36 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 foundPaymentMethod = true;
                 _otterState.Api_MessageId_Payment = null;
             }
+            if(_otterState.Api_Active_Payment_Method == "23")
+            {
+                if(msg.result.buttonId == "SplitPaymentYes")
+                {
+                    dataNeeded.@params.clearScreen = true;
+                    dataNeeded.id = _otterState.Api_MessageId_Payment;
+                    _otterProtocolHandler.SendMessage(dataNeeded);
+                    foundPaymentMethod = true;
+
+                    dataNeeded.@params = new dataNeededParams();
+                    dataNeeded.@params.operatorMode = false;
+                    dataNeeded.@params.titleText = "Sláðu inn upphæð";
+                    dataNeeded.@params.keyPad = true;
+                    dataNeeded.@params.keyPadPattern = "#####";
+                    dataNeeded.@params.minimalInputLength = 1;
+                    dataNeeded.@params.deviceError = false;
+                    dataNeeded.@params.exitButton = 0;
+                    dataNeeded.id = _otterState.Api_MessageId_Payment;
+                    _otterProtocolHandler.SendMessage(dataNeeded);
+
+                }
+                else
+                {
+                    dataNeeded.@params.clearScreen = true;
+                    dataNeeded.id = _otterState.Api_MessageId_Payment;
+                    _otterProtocolHandler.SendMessage(dataNeeded);
+                    foundPaymentMethod = true;
+                }
+            }
+
             if(!foundPaymentMethod)
             {
                 _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.exitPayment

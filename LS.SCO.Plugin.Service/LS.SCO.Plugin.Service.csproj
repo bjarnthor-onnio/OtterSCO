@@ -12,6 +12,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="ServiceRegisterers\**" />
+	  <EmbeddedResource Remove="ServiceRegisterers\**" />
+	  <None Remove="ServiceRegisterers\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.0" />
 		<PackageReference Include="LS.SelfCheckout.Connector.Plugin" Version="1.11.12" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
@@ -31,10 +37,6 @@
 	  <ProjectReference Include="..\Onnio.ConfigService\Onnio.ConfigurationService.csproj" />
 	  <ProjectReference Include="..\Onnio.LoggingService\Onnio.LoggingService.csproj" />
 	  <ProjectReference Include="..\Onnio.PaymentService\Onnio.PaymentService.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="ServiceRegisterers\" />
 	</ItemGroup>
 
 </Project>

@@ -204,8 +204,40 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             if (msg.@params.type == "23")
             {
 
-                var result = _adapter.PayForCurrentTransactionExternal("23").Result;
-                if (result.Success)
+                var dataNeeded = new dataNeeded();
+                dataNeeded.@params = new dataNeededParams();
+                dataNeeded.@params.operatorMode = false;
+                dataNeeded.@params.titleText = "Greiða að hluta?";
+                dataNeeded.@params.instructionsText = "";
+                dataNeeded.@params.keyPad = false;
+                dataNeeded.@params.deviceError = false;
+                dataNeeded.@params.exitButton = 0;
+                dataNeeded.@params.scannerEnabled = false;
+                Button button1 = new Button
+                {
+                    buttonId = "SplitPaymentYes",
+                    buttonText = "Já"
+                    
+                };
+                Button button2 = new Button
+                {
+                    buttonId = "SplitPaymentNo",
+                    buttonText = "Nei"
+                    
+                };
+                dataNeeded.@params.buttons = new List<Button>
+                {
+                    button1,
+                    button2
+                };
+
+                dataNeeded.id = Guid.NewGuid().ToString();
+                _otterState.Api_MessageId_Payment = dataNeeded.id;
+                _otterState.Api_Active_Payment_Method = "23";
+                _otterProtocolHandler.SendMessage(dataNeeded);
+                return;
+                //var result = _adapter.PayForCurrentTransactionExternal("23",_otterState.Pos_BalanceAmount).Result;
+                /*if (result.Success)
                 {
                     var postOutput = await _adapter.FinishTransactionAsync();
 
@@ -253,7 +285,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         id = _otterState.Api_MessageId
                     });
                     _otterState.Api_MessageId = null;
-                }
+                }*/
 
             }
             else
