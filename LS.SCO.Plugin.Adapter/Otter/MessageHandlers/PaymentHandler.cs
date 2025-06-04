@@ -236,56 +236,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 _otterState.Api_Active_Payment_Method = "23";
                 _otterProtocolHandler.SendMessage(dataNeeded);
                 return;
-                //var result = _adapter.PayForCurrentTransactionExternal("23",_otterState.Pos_BalanceAmount).Result;
-                /*if (result.Success)
-                {
-                    var postOutput = await _adapter.FinishTransactionAsync();
-
-                    if (postOutput.ErrorList?.Count() > 0)
-                    {
-                        Console.WriteLine("################   ERROR DURING Post Transaction");
-                        _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
-                        {
-                            result = new paymentResult
-                            {
-                                successful = false,
-                                message = "Ekki tókst að bóka færslu en greiðsla hefur verið kláruð. Hafið samband við starfsmann."
-                            },
-                            id = _otterState.Api_MessageId
-                        });
-                        _otterState.Api_MessageId = null;
-                    }
-                    else
-                    {
-                        _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
-                        {
-                            result = new paymentResult
-                            {
-                                successful = true,
-                                amount = (int)_otterState.Pos_BalanceAmount * 100
-                            },
-                            id = _otterState.Api_MessageId
-                        });
-
-                        _otterEventsManager.sendTransactionFinish();
-
-                    }
-                    return;
-
-                }
-                else
-                {
-                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
-                    {
-                        result = new paymentResult
-                        {
-                            successful = false,
-                            message = result.ErrorList.First().ErrorMessage
-                        },
-                        id = _otterState.Api_MessageId
-                    });
-                    _otterState.Api_MessageId = null;
-                }*/
+               
 
             }
             else

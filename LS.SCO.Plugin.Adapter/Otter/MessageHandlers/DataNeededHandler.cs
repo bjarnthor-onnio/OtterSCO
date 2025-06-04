@@ -3,6 +3,7 @@ using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
 using LS.SCO.Plugin.Adapter.Otter.Models;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
+using WSSCOMobilePosPrint;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
@@ -143,12 +144,13 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     dataNeeded.@params.operatorMode = false;
                     dataNeeded.@params.titleText = "Sláðu inn upphæð";
                     dataNeeded.@params.keyPad = true;
-                    dataNeeded.@params.keyPadPattern = "#####";
+                    dataNeeded.@params.keyPadInputMask = 4;
                     dataNeeded.@params.minimalInputLength = 1;
                     dataNeeded.@params.deviceError = false;
                     dataNeeded.@params.exitButton = 0;
                     dataNeeded.id = _otterState.Api_MessageId_Payment;
                     _otterProtocolHandler.SendMessage(dataNeeded);
+                    return;
 
                 }
                 else
@@ -157,6 +159,97 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     dataNeeded.id = _otterState.Api_MessageId_Payment;
                     _otterProtocolHandler.SendMessage(dataNeeded);
                     foundPaymentMethod = true;
+
+                    if (msg.result.data != null)
+                    {
+
+                        int.TryParse(msg.result.data, out int amount);
+                        if (amount > _otterState.Pos_BalanceAmount)
+                        {
+                            _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.exitPayment
+                            {
+                                result = new exitPaymentResult
+                                {
+                                    successful = false,
+                                    message = "Upphæð er hærri en heildarupphæð. Vinsamlega reyndu aftur."
+                                },
+                                id = _otterState.Api_MessageId
+                            });
+                            
+                            return;
+                        }
+
+                        var appPaymentResult = _adapter.PayForCurrentTransactionExternal("23", amount).Result;
+                       
+                        if (!appPaymentResult.Success)
+                        {
+                            _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                            {
+                                result = new paymentResult
+                                {
+                                    successful = false,
+                                    message = appPaymentResult.ErrorList.First().ErrorMessage,
+                                    amount = amount * 100
+                                },
+                                id = _otterState.Api_MessageId
+                            });
+                            _otterState.Api_Active_Payment_Method = null;
+                            return;
+                        }
+                        else
+                        {
+                            _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                            {
+                                result = new paymentResult
+                                {
+                                    successful = true,
+                                    amount = amount * 100
+                                },
+                                id = _otterState.Api_MessageId
+                            });
+                            var calculatedBasket = _adapter.CalculateTotals().Result;
+                            _otterState.Pos_BalanceAmount = calculatedBasket.Transaction.RemainingAmount;
+                            _otterEventsManager.sendTotals((int)_otterState.Pos_BalanceAmount, (int)_otterState.Pos_TotalAmount);
+                            _otterState.Api_MessageId = null;
+                            _otterState.Api_Active_Payment_Method = null;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        var appPaymentResult = _adapter.PayForCurrentTransactionExternal("23", _otterState.Pos_BalanceAmount).Result;
+                        if (!appPaymentResult.Success)
+                        {
+                            _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                            {
+                                result = new paymentResult
+                                {
+                                    successful = false,
+                                    message = appPaymentResult.ErrorList.First().ErrorMessage,
+                                    
+                                },
+                                id = _otterState.Api_MessageId
+                            });
+                            _otterState.Api_Active_Payment_Method = null;
+                            _otterState.Api_MessageId = null;
+                            return;
+                        }
+                        else
+                        {
+                            _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
+                            {
+                                result = new paymentResult
+                                {
+                                    successful = true,
+                                    amount = Convert.ToInt16(_otterState.Pos_BalanceAmount) * 100
+                                },
+                                id = _otterState.Api_MessageId
+                            });
+                           
+                        }
+                    }
+
+
                 }
             }
 
@@ -173,7 +266,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 });
                 return;
             }
-
+           
             var postOutput = _adapter.FinishTransactionAsync().Result;
             
             if (postOutput.ErrorList.Count() > 0)

@@ -245,7 +245,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             PaymentRequestDto request = new PaymentRequestDto
             {
                 CurrencyCode = "ISK",
-                Amount = (int)currentTransaction.Transaction.BalanceAmountWithTax,
+                Amount = Convert.ToInt16(amount),
                 Reference = "Vörur",
                 CustomerId = customerId,
                 ReceiptId = currentTransaction.Transaction.ReceiptId,
@@ -279,7 +279,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             AddToTransOutputDto output = new AddToTransOutputDto();
             output.ConfigureBaseInputProperties(this);
 
-            //Todo: This is shit, make better code you bastard.
+           
             if (!result.Success)
             {
                 Error error = new Error();
@@ -298,7 +298,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                 {
                     AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
                     {
-                        TotalAmount = currentTransaction.Transaction.BalanceAmountWithTax//Convert.ToDecimal(amount) / 100,
+                        TotalAmount = Convert.ToInt16(amount)
                     },
                     TenderType = tenderType
                 };
