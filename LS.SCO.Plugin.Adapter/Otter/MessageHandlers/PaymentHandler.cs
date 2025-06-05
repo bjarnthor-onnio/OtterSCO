@@ -203,6 +203,19 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             if (msg.@params.type == "23")
             {
+                if (_otterState.App_PaymentTendered)
+                {
+                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.exitPayment
+                    {
+                        result = new exitPaymentResult
+                        {
+                            successful = false,
+                            message = "App greiðsla hefur verið framkvæmd. Vinsamlegast veldu annan greiðslumáta."
+                        },
+                        id = _otterState.Api_MessageId
+                    });
+                    return;
+                }
 
                 var dataNeeded = new dataNeeded();
                 dataNeeded.@params = new dataNeededParams();

@@ -32,6 +32,7 @@ namespace LS.SCO.Plugin.Adapter.Otter
         public string? Pos_LastTransactionId { get; set; } = null;
         public decimal? Pos_BalanceAmount { get; set; } = null;
         public decimal? Pos_TotalAmount { get; set; } = null;
+        public bool App_PaymentTendered { get; set; } = false;
         public void Reset()
         {
             State = StatesEnum.Idle;
@@ -39,6 +40,7 @@ namespace LS.SCO.Plugin.Adapter.Otter
             Pos_TransactionId = null;
             Pos_TransactionStarted = false;
             Api_Active_Payment_Method = "";
+            App_PaymentTendered = false;
         }
     }
 }

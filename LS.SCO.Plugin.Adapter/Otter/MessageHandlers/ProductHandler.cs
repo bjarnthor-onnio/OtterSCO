@@ -219,7 +219,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     }
                 }
 
-                _otterEventsManager.sendTotals(addItem.Transaction.BalanceAmountWithTax, addItem.Transaction.NetAmountWithTax);
+                _otterEventsManager.sendTotals(addItem.Transaction.RemainingAmount, addItem.Transaction.NetAmountWithTax);
             }
         }
     }

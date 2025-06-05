@@ -133,6 +133,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             if(_otterState.Api_Active_Payment_Method == "23")
             {
+               
+
                 if(msg.result.buttonId == "SplitPaymentYes")
                 {
                     dataNeeded.@params.clearScreen = true;
@@ -198,6 +200,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         }
                         else
                         {
+                            _otterState.App_PaymentTendered = true;
                             _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
                             {
                                 result = new paymentResult
