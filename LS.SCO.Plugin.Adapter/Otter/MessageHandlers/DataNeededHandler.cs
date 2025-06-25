@@ -3,6 +3,7 @@ using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
 using LS.SCO.Plugin.Adapter.Otter.Models;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
+//using LS.SCO.Plugin.Adapter.Otter.Models.FromSCO;
 using WSSCOMobilePosPrint;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -19,6 +20,55 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             dataNeeded dataNeeded = new dataNeeded();
             dataNeeded.@params = new dataNeededParams();
             bool foundPaymentMethod = false;
+            
+            if(_otterState.Api_DataNeededType == "NextCoupon")
+            {
+                dataNeeded.@params.clearScreen = true;
+                dataNeeded.id = _otterState.Api_MessageId_Product;
+                _otterProtocolHandler.SendMessage(dataNeeded);
+                _otterState.Pos_VisuallyVerify = true;
+                /*intervention intervention = new intervention
+                {
+                    id = _otterState.Api_MessageId_Product,
+                    @params = new interventionParams
+                    {
+                        code = "NextCoupon",
+                        text = "Minni Sóun",
+                        instructionsText = "Vinsamlega staðfestu að rétt vara sé með minni sóun afslátt.",
+                        type = "delayed",
+                        buttons = new List<InterventionButton>
+                        {
+                             new InterventionButton
+                             {
+                                  buttonId = "NextCouponYes",
+                                  buttonText = "Já, rétt vara",
+                             },
+                             new InterventionButton
+                             {
+                                  buttonId = "NextCouponNo",
+                                  buttonText = "Nei, ekki rétt vara",
+                             }
+                        }
+                    }
+                };
+                 _otterProtocolHandler.SendMessage(intervention);
+                */
+                Otter.Models.FromSCO.product productMessage = new Otter.Models.FromSCO.product
+                {
+
+                    id = _otterState.Api_MessageId_Product,
+                    @params = new Otter.Models.FromSCO.ProductParams
+                    {
+                        barcode = msg.result.data,
+                    }
+
+                };
+
+                ProductHandler productHandler = new ProductHandler(_otterState, _otterProtocolHandler, _otterEventsManager, _adapter);
+                productHandler.Handle(productMessage);
+                return;
+            }
+
             if (msg.result.back && _otterState.Api_Active_Payment_Method is not null)
             {
                 payment goPayment = new payment();

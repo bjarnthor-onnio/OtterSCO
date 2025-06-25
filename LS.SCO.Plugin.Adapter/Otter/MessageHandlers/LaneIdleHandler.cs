@@ -36,7 +36,9 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                         @params = result
 
                     });
-                    _otterEventsManager.sendTotals(_currTransaction.Transaction.BalanceAmountWithTax, _currTransaction.Transaction.NetAmountWithTax);
+                    //TODO: This is a workaround for the issue with the remaining amount not being sent correctly
+                    //int remainingAmount = _currTransaction.Transaction.RemainingAmount != 0 ? Convert.ToInt16(_currTransaction.Transaction.RemainingAmount) : Convert.ToInt16(_currTransaction.Transaction.BalanceAmountWithTax));
+                    _otterEventsManager.sendTotals(_currTransaction.Transaction.NetAmountWithTax, _currTransaction.Transaction.NetAmountWithTax);
                     _otterState.Api_MessageId = null;
                 }
             }

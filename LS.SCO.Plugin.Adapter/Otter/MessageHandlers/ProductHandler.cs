@@ -5,6 +5,7 @@ using LS.SCO.Entity.DTO.Toshiba.Pos;
 using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
 using LS.SCO.Plugin.Adapter.Otter.Extensions;
+using LS.SCO.Plugin.Adapter.Otter.Models;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
 using Microsoft.AspNetCore.Mvc.Formatters.Internal;
 
@@ -36,12 +37,20 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             var itemDetails = await _adapter.GetItemDetailAsync(input);
             bool isCoupon = false;
             string couponBarCode = string.Empty;
+            string couponType = string.Empty;
+            bool visualVerify = false;
+            int ageLimit = 0;
+            int customerAge = 0;
+            string securityMode = "Default";
+            decimal weight = 0;
+            decimal qty = 0;
 
             if (itemDetails.ErrorList?.Count() > 0)
             {
-                if(itemDetails.ErrorList.First().ErrorMessage.ToLower().Contains("coupon"))
+                if (itemDetails.ErrorList.First().ErrorMessage.ToLower().Contains("coupon"))
                 {
                     isCoupon = true;
+                    couponType = itemDetails.ErrorList.First().ErrorMessage.Split('-').LastOrDefault();
                     couponBarCode = msg.@params.barcode;
                 }
                 else
@@ -161,29 +170,34 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                     return;
                 }
 
+                //TODO Check if time restricted
+                weight = msg.@params.weight > 0 ? (decimal)msg.@params.weight : 0;
+
+                //Add item to transaction
+                qty = itemDetails.ScaleItem ? (weight / 1000) : Convert.ToDecimal(msg.@params.quantity);
+
+                
+                int.TryParse(itemDetails.FeatureFlags?.Find(x => x.Flag == "AgeLimit")?.Value, out ageLimit);
+
+                bool.TryParse(itemDetails.FeatureFlags?.Find(x => x.Flag == "VisualVerify")?.Value, out visualVerify);
+                
+                if(_otterState.Pos_VisuallyVerify)
+                {
+                    visualVerify = true;
+                }
+
+                int.TryParse(itemDetails.FeatureFlags?.Find(x => x.Flag == "CustomerAge")?.Value, out customerAge);
+
+                securityMode = itemDetails.FeatureFlags?.Find(x => x.Flag == "SecurityMode")?.Value ?? "Default";
+
+                Console.WriteLine("################   SECURITY MODE: " + securityMode);
+
             }
-            //TODO Check if time restricted
-            decimal weight = msg.@params.weight > 0 ? (decimal)msg.@params.weight : 0;
-
-            //Add item to transaction
-            decimal qty = itemDetails.ScaleItem ? (weight / 1000) : Convert.ToDecimal(msg.@params.quantity);
-
-            int ageLimit = 0;
-            int.TryParse(itemDetails.FeatureFlags?.Find(x => x.Flag == "AgeLimit")?.Value, out ageLimit);
-
-            bool visualVerify = false;
-            bool.TryParse(itemDetails.FeatureFlags?.Find(x => x.Flag == "VisualVerify")?.Value, out visualVerify);
-
-            int customerAge = 0;
-            int.TryParse(itemDetails.FeatureFlags?.Find(x => x.Flag == "CustomerAge")?.Value, out customerAge);
-
-            string securityMode = itemDetails.FeatureFlags?.Find(x => x.Flag == "SecurityMode")?.Value ?? "Default";
-
-            Console.WriteLine("################   SECURITY MODE: " + securityMode);
-
+            
             string barCode = couponBarCode != string.Empty ? couponBarCode : itemDetails.BarCode;
             var addItem = _adapter.AddItemToTransaction(barCode, itemDetails.ItemNo, _otterState.Pos_TransactionId, qty, isCoupon).Result;
-            
+
+
             if (addItem.ErrorList?.Count() > 0)
             {
                 Console.WriteLine("################   ERROR DURING Add Item To Transaction at LsCentral");
@@ -191,15 +205,30 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             else
             {
-                if(!isCoupon)
+
+                if (isCoupon && couponType == "Next")
                 {
-                    var total = _adapter.CalculateTotals().Result;
+                    dataNeeded dataNeeded = new dataNeeded();
+                    dataNeeded.@params = new dataNeededParams();
+                    dataNeeded.@params = new dataNeededParams();
+                    dataNeeded.@params.operatorMode = false;
+                    dataNeeded.@params.titleText = "Minni sóun";
+                    dataNeeded.@params.scannerEnabled = true;
+                    dataNeeded.@params.keyPad = false;
+                    dataNeeded.@params.deviceError = false;
+                    dataNeeded.@params.exitButton = 1;
+                    dataNeeded.@params.instructionsText = "Skannaðu vöru";
+                    dataNeeded.id = _otterState.Api_MessageId_Product;
+                    _otterProtocolHandler.SendMessage(dataNeeded);
+                    _otterState.Api_DataNeededType = "NextCoupon";
+                    
+                    return;
+
                 }
-                
 
                 SaleItemDto saleItem = addItem.Transaction.SaleItems?.OrderBy(x => x.LineNr).Last();
                 var product = ProductHelper.PopulateProduct(saleItem);
-                
+
                 product.result.customerAge = ageLimit;                                     //TODO - test
                 product.result.visualVerify = visualVerify;                                //TODO - test
                 product.result.securityMode = securityMode;
@@ -207,8 +236,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 product.id = _otterState.Api_MessageId_Product;
                 _otterProtocolHandler.SendMessage(product);
 
-                if(saleItem.HasLineDiscount || saleItem.HasPeriodicDiscount || saleItem.PriceReductions.Count > 0)
-                { 
+                if (saleItem.HasLineDiscount || saleItem.HasPeriodicDiscount || saleItem.PriceReductions.Count > 0)
+                {
                     var discountItems = addItem.Transaction.SaleItems.Where(x => (x.HasLineDiscount || x.HasPeriodicDiscount || x.PriceReductions.Count > 0) && x.LineNr != saleItem.LineNr);
                     foreach (var item in discountItems)
                     {
@@ -218,9 +247,14 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
                     }
                 }
-
-                _otterEventsManager.sendTotals(addItem.Transaction.RemainingAmount, addItem.Transaction.NetAmountWithTax);
+                int remainingAmount = addItem.Transaction.RemainingAmount != 0 ? (int)(addItem.Transaction.RemainingAmount) : (int)(addItem.Transaction.BalanceAmountWithTax);
+                _otterEventsManager.sendTotals(remainingAmount, addItem.Transaction.NetAmountWithTax);
+                _otterState.Pos_VisuallyVerify = false;
             }
+        }
+        public string HandleProduct()
+        {
+            return "";
         }
     }
 }
