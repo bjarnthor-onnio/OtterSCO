@@ -26,7 +26,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
             if (recalcNeeded)
             {
-                var calculatedBasket = _adapter.CalculateTotals().Result;
+                var calculatedBasket = _adapter.GetCurrentTransaction().Result;
 
                 //var discountItems = currentTransaction.Transaction.SaleItems.Where(x => (x.HasLineDiscount || x.HasPeriodicDiscount) );
                 var discountItems = calculatedBasket.Transaction.SaleItems.Where(x => (x.HasLineDiscount || x.HasPeriodicDiscount || x.PriceReductions.Count > 0));

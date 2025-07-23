@@ -51,6 +51,12 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 {
                     isCoupon = true;
                     couponType = itemDetails.ErrorList.First().ErrorMessage.Split('-').LastOrDefault();
+                    if(couponType == "Disabled")
+                    {
+                        string disabledMessage = "Afsláttur er ekki virkur.";
+                        _otterProtocolHandler.SendMessage(OtterMessages.ProductError(_otterState.Api_MessageId_Product, disabledMessage));
+                        return;
+                    }
                     couponBarCode = msg.@params.barcode;
                 }
                 else
