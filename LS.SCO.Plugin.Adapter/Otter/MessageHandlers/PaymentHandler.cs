@@ -64,7 +64,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 return;
             }
 
-            var prePay = await _adapter.PreparePaymentAsync();
+            /*var prePay = await _adapter.PreparePaymentAsync();
 
             if (prePay.ErrorList?.Count() > 0)
             {
@@ -80,7 +80,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 });
                 _otterState.Api_MessageId = null;
                 return;
-            }
+            }*/
 
             var pay = _adapter.PayForCurrentTransaction((long)_otterState.Pos_BalanceAmount, msg.@params.type).Result;
 
@@ -203,57 +203,53 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
             }
             if (msg.@params.type == "23")
             {
-
-                var result = _adapter.PayForCurrentTransactionExternal("23").Result;
-                if (result.Success)
+                if (_otterState.App_PaymentTendered)
                 {
-                    var postOutput = await _adapter.FinishTransactionAsync();
-
-                    if (postOutput.ErrorList?.Count() > 0)
+                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.exitPayment
                     {
-                        Console.WriteLine("################   ERROR DURING Post Transaction");
-                        _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
-                        {
-                            result = new paymentResult
-                            {
-                                successful = false,
-                                message = "Ekki tókst að bóka færslu en greiðsla hefur verið kláruð. Hafið samband við starfsmann."
-                            },
-                            id = _otterState.Api_MessageId
-                        });
-                        _otterState.Api_MessageId = null;
-                    }
-                    else
-                    {
-                        _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
-                        {
-                            result = new paymentResult
-                            {
-                                successful = true,
-                                amount = (int)_otterState.Pos_BalanceAmount * 100
-                            },
-                            id = _otterState.Api_MessageId
-                        });
-
-                        _otterEventsManager.sendTransactionFinish();
-
-                    }
-                    return;
-
-                }
-                else
-                {
-                    _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.payment
-                    {
-                        result = new paymentResult
+                        result = new exitPaymentResult
                         {
                             successful = false,
-                            message = result.ErrorList.First().ErrorMessage
+                            message = "App greiðsla hefur verið framkvæmd. Vinsamlegast veldu annan greiðslumáta."
                         },
                         id = _otterState.Api_MessageId
                     });
-                    _otterState.Api_MessageId = null;
+                    return;
                 }
+
+                var dataNeeded = new dataNeeded();
+                dataNeeded.@params = new dataNeededParams();
+                dataNeeded.@params.operatorMode = false;
+                dataNeeded.@params.titleText = "Greiða að hluta?";
+                dataNeeded.@params.instructionsText = "";
+                dataNeeded.@params.keyPad = false;
+                dataNeeded.@params.deviceError = false;
+                dataNeeded.@params.exitButton = 0;
+                dataNeeded.@params.scannerEnabled = false;
+                Button button1 = new Button
+                {
+                    buttonId = "SplitPaymentYes",
+                    buttonText = "Já"
+                    
+                };
+                Button button2 = new Button
+                {
+                    buttonId = "SplitPaymentNo",
+                    buttonText = "Nei"
+                    
+                };
+                dataNeeded.@params.buttons = new List<Button>
+                {
+                    button1,
+                    button2
+                };
+
+                dataNeeded.id = Guid.NewGuid().ToString();
+                _otterState.Api_MessageId_Payment = dataNeeded.id;
+                _otterState.Api_Active_Payment_Method = "23";
+                _otterProtocolHandler.SendMessage(dataNeeded);
+                return;
+               
 
             }
             else

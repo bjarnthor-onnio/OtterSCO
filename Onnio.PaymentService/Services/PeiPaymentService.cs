@@ -36,7 +36,8 @@ namespace Onnio.PaymentService.Services
                 TotalAmount = request.Amount,
                 TenderTypeCode = request.TenderTypeId,
                 CurrencyCode = request.CurrencyCode ?? "ISK",
-                CardNumber = request.CustomerId
+                CardNumber = request.CustomerId,
+                ExtraInformation = ""
                
             };
 

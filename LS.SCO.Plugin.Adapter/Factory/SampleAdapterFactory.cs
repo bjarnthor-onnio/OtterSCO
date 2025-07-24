@@ -1,6 +1,7 @@
 ﻿using LS.SCO.Interfaces.Adapter;
 using LS.SCO.Interfaces.Factories;
 using LS.SCO.Plugin.Adapter.Adapters;
+using LS.SCO.Plugin.Adapter.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LS.SCO.Plugin.Adapter.Factory
@@ -10,14 +11,16 @@ namespace LS.SCO.Plugin.Adapter.Factory
     /// </summary>
     public class SampleAdapterFactory : IAdapterFactory
     {
-        private readonly IServiceProvider _services;
+        private readonly IAdapterConfigurationManager _configurationManager;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SampleAdapterFactory(IServiceProvider services)
+        public SampleAdapterFactory(IAdapterConfigurationManager configurationManager, IServiceScopeFactory scopeFactory)
         {
-            this._services = services;
+            this._configurationManager = configurationManager;
+            this._scopeFactory = scopeFactory;
         }
 
         /// <summary>
@@ -32,13 +35,33 @@ namespace LS.SCO.Plugin.Adapter.Factory
         {
             Adapters = new List<IPosAdapter>();
 
-            var adapter = this._services.GetService<IPosAdapter>() as SamplePosAdapter;
+            for (int i = 0; i < this._configurationManager.Configuration.Count; i++)
+            {
+                var adapter = CreateScopedAdapter();
 
-            adapter?.SetUpServices(0);
+                adapter?.SetUpServices(i);
 
-            Adapters.Add(adapter);
+                Adapters.Add(adapter);
+            }
 
             return Adapters;
+        }
+        private ISamplePosAdapter CreateScopedAdapter()
+        {
+            var result = default(ISamplePosAdapter);
+
+            if (this._scopeFactory != null)
+            {
+                var scope = this._scopeFactory.CreateScope();
+
+                var adapter = scope.ServiceProvider.GetRequiredService<ISamplePosAdapter>();
+
+                adapter.Scope = scope;
+
+                result = adapter;
+            }
+
+            return result;
         }
     }
 }

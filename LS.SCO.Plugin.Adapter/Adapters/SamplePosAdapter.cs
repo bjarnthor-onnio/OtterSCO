@@ -34,41 +34,31 @@ using Onnio.PaymentService.Services;
 using Onnio.ConfigService.Interface;
 using LS.SCO.Entity.DTO.SCOService.PrintPreviousTransaction;
 using LS.SCO.Entity.DTO.SCOService.CalculateBasket;
+using LS.SCO.Plugin.Adapter.Interfaces;
 
 namespace LS.SCO.Plugin.Adapter.Adapters
 {
     /// <summary>
     /// This adapter class is responsible for creating and handling a connection to the SCO Device.
     /// </summary>
-    public partial class SamplePosAdapter : IPosAdapter
+    public partial class SamplePosAdapter : ISamplePosAdapter
     {
         #region Infra
 
-        protected CancellationTokenSource _cancellationTokenSource;
-        protected readonly IMapper _mapper;
         protected readonly ILogManager _logService;
-        protected ISamplePosService _posService;
+        protected ISamplePosServiceDisabled _posService;
+        private readonly IAdapterConfigurationManager _adapterConfigurationManager;
+        protected CancellationTokenSource _cancellationTokenSource;
         protected readonly IAdapterValidationService _validationService;
         protected readonly ISCOCacheService _cacheService;
-        private readonly IServiceConfigurationManager _configuration;
-        private readonly ILogManager _logManager;
         private readonly IServiceProvider _services;
+        private readonly IMapper _mapper;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfigurationService _configService;
 
-        public List<BaseAdapterConfiguration> AdapterConfiguration { get; set; } = new List<BaseAdapterConfiguration>();
+        public BaseAdapterConfiguration AdapterConfiguration { get; set; }
 
-        public BaseAdapterConfiguration Configuration { get; set; }
-
-        /// <summary>
-        /// Identifies the terminal by its unique identifier.
-        /// </summary>
-        public string TerminalId { get; private set; }
-
-        /// <summary>
-        /// Scopes to allow the creation of multiple instances of the adapter class in scoped lifetime.
-        /// This allows the usage of multiple Self Checkout terminals connected.
-        /// </summary>
+        public string TerminalId { get => AdapterConfiguration.TerminalId; }
         public IServiceScope Scope { get; set; }
 
         /// <summary>
@@ -80,28 +70,25 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         /// <param name="validationService"></param>
         /// <param name="cacheService"></param>
         public SamplePosAdapter(
-            IMapper mapper,
             ILogManager logService,
+            IAdapterConfigurationManager adapterConfigurationManager,
             IAdapterValidationService validationService,
             ISCOCacheService cacheService,
-            IServiceConfigurationManager configuration,
-            ILogManager logManager,
+            IMapper mapper,
             IServiceProvider services,
             IHttpClientFactory httpClientFactory,
             IConfigurationService configService)
         {
-            this._mapper = mapper;
             this._logService = logService;
-            this._validationService = validationService;
-            this._cacheService = cacheService;
-            this._configuration = configuration;
-            this._logManager = logManager;
             this._services = services;
             this._posService = (ISamplePosServiceDisabled)this._services.GetService<ISamplePosService>();
-            this._httpClientFactory = httpClientFactory;
-
-
+            this._adapterConfigurationManager = adapterConfigurationManager;
             this._cancellationTokenSource = new CancellationTokenSource();
+            this._validationService = validationService;
+            this._cacheService = cacheService;
+            _mapper = mapper;
+            //Onnio addons
+            this._httpClientFactory = httpClientFactory;
             _configService = configService;
         }
 
@@ -111,62 +98,16 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         /// <param name="position">Position of the Adapters array in case of searching for adapter configurations in separate confoguration providers.</param>
         public void SetUpServices(int position = 0)
         {
-            this.LoadInstalledDevices();
-
-            this.TerminalId = this.AdapterConfiguration[position].TerminalId;
-
-            this.Configuration = this.AdapterConfiguration[position];
+            if (this._adapterConfigurationManager != null)
+            {
+                this.AdapterConfiguration = this._adapterConfigurationManager.Configuration[position];
+            }
         }
 
         /// <summary>
         /// Loads the installed devices from the configuration file.
         /// </summary>
-        public void LoadInstalledDevices()
-        {
-            var appSettings = this._configuration.GetSetupSettings();
-
-            this._logManager.LogServiceInformation(appSettings);
-
-            var settings = _configuration.GetTerminalSettings();
-
-            if (!string.IsNullOrWhiteSpace(settings?.Token))
-            {
-                var input = new GetTerminalSettingsInputDto
-                {
-                    Token = settings.Token,
-                    StoreId = settings.StoreId,
-                    TerminalId = settings.TerminalId
-                };
-
-                var result = this._posService.GetTerminalSettingsAsync(input).Result;
-
-                appSettings.ApiClientConfiguration.HardwareStationApiBaseUrl = appSettings.ApiClientConfiguration.HardwareStationApiBaseUrl;
-                appSettings.SignalRClientConfiguration.HardwareStationSignalRBaseUrl = appSettings.SignalRClientConfiguration.HardwareStationSignalRBaseUrl;
-
-                _configuration.SaveSetupSettings(appSettings).Wait();
-
-                if (result.ErrorList.Any(e => e.ErrorMessage.Contains("unauthorized")))
-                {
-                    var defaultConfigs = new BaseAdapterConfiguration();
-                    defaultConfigs.StoreId = settings.StoreId;
-                    defaultConfigs.Token = settings.Token;
-
-                    this.AdapterConfiguration.Add(defaultConfigs);
-                }
-
-                if ((result?.Token?.Equals(settings.Token) ?? false) && !result.ScoDevices.IsNullOrEmpty())
-                {
-                    this._cacheService.InitializeCacheServices(result);
-
-                    foreach (var sco in result.ScoDevices)
-                    {
-                        this.AdapterConfiguration.Add(this.FillAdapterConfiguration(sco, settings, result.StaffId));
-                    }
-
-                    this.ValidateConfigurations();
-                }
-            }
-        }
+        
 
         /// <summary>
         /// Starts the operation of the connected device.
@@ -233,7 +174,12 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             return result;
         }
-
+        public async Task<AddToTransOutputDto> AddToTransaction(AddToTransInputDto input)
+        {
+            var result =  await _posService.AddToTransactionAsync(input);
+            return result;
+            
+        }
         /// <summary>
         /// Adds an item to the current transaction.
         /// </summary>
@@ -248,14 +194,17 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             input.Data.Quantity = qty;
 
             input.ConfigureBaseInputProperties(this);
-            
+            AddToTransOutputDto result = null;
             if(isCoupon)
             {
                 input.Data.EntryType = 6;
-            }
-            
-            var result = await this._posService.AddItemAsync(input);
+                result = await _posService.AddToTransactionAsync(input);
                 
+            }
+            else
+            {
+                result = await this._posService.AddItemAsync(input);
+            }
 
             if (result != null && result.Result == "IFC_OK")
             {
@@ -288,17 +237,15 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             return result;
         }
-        public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, string customerId = "", bool skipPaymentLine = true)
+        public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, decimal? amount, string customerId = "", bool skipPaymentLine = true)
         {
-            EFTRequestOutputDto sessionResult = null;
             GetCurrentTransactionOutputDto currentTransaction = await GetCurrentTransaction();
 
-            TerminalId = currentTransaction.Transaction.TerminalId;
 
             PaymentRequestDto request = new PaymentRequestDto
             {
                 CurrencyCode = "ISK",
-                Amount = (int)currentTransaction.Transaction.BalanceAmountWithTax,
+                Amount = Convert.ToInt16(amount),
                 Reference = "Vörur",
                 CustomerId = customerId,
                 ReceiptId = currentTransaction.Transaction.ReceiptId,
@@ -332,7 +279,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             AddToTransOutputDto output = new AddToTransOutputDto();
             output.ConfigureBaseInputProperties(this);
 
-            //Todo: This is shit, make better code you bastard.
+           
             if (!result.Success)
             {
                 Error error = new Error();
@@ -351,8 +298,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                 {
                     AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
                     {
-                        TotalAmount = currentTransaction.Transaction.BalanceAmountWithTax//Convert.ToDecimal(amount) / 100,
-
+                        TotalAmount = Convert.ToInt16(amount)
                     },
                     TenderType = tenderType
                 };
@@ -378,24 +324,43 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         /// Pays for current transaction.
         /// </summary>
         /// <returns></returns>
-        public async Task<EFTRequestOutputDto> PayForCurrentTransaction(decimal amount, string tenderType)
+        public async Task<BaseOutputEntity> PayForCurrentTransaction(decimal amount, string tenderType)
         {
+               /* var serviceInput = new EFTRequestInputDto(EFTRequestType.Purchase)
+                {
+                    AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
+                    {
+                        TotalAmount = Convert.ToDecimal(amount),
+                    },
+                    TenderType = tenderType
+                };
+                serviceInput.ManualEntry = true;
+                serviceInput.ConfigureBaseInputProperties(this);
 
+                var result = await _posService.CallPaymentService(serviceInput);
+            
+                _logService.WebserviceCallSuccessful(webservice: "CallPaymentService");
+
+                if (result.Success && string.IsNullOrWhiteSpace(result.Message))
+                {
+                    _logService.MethodEndsWithSuccess();
+                    return new BaseOutputEntity();
+                }
+
+                _logService.MethodEndsWithError(errorMessages: result.Message);
+
+                return new BaseOutputEntity
+                {
+                    ErrorList = new List<Error> {
+                        new Error
+                        {
+                            ErrorMessage = result.Message
+                        }
+                    }
+                };*/
             EFTRequestOutputDto sessionResult = null;
             try
             {
-                //This is not supported for our EFT devices. Might have to include it in the future.
-
-                //sessionResult = await DoPaymentSessions(EFTRequestType.StartSession);
-                //if (!sessionResult.IsValid())
-                //{
-                //    _logService.LogInfo(message: $"A session could not be started, status and result set");
-
-                //    //Make sure FinishSession is not called in the try/Finally 
-                //    sessionResult = null;
-
-                //    return sessionResult;
-                //}
 
                 var input = new EFTRequestInputDto(EFTRequestType.Purchase)
                 {
@@ -466,14 +431,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                     this._cancellationTokenSource.TryReset();
             }
         }
-        public async Task<PreparePaymentOutputDto> PreparePaymentAsync()
-        {
-            var input = new PreparePaymentInputDto();
-            input.ConfigureBaseInputProperties(this);
-
-            var result = await this._posService.PreparePaymentAsync(input);
-            return result;
-        }
+       
         /// <summary>
         /// Finishes the current transaction.
         /// </summary>
@@ -570,21 +528,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             return result;
         }
-        public async Task<bool> GetPaymentFromExternalProvider(string test)
-        {
-            var client = _httpClientFactory.CreateClient();
-            HttpResponseMessage message = await client.GetAsync("https://catfact.ninja/fact");
-            if (message.IsSuccessStatusCode)
-            {
-                var response = await message.Content.ReadAsStringAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+       
         public StaffLogonOutputDto StaffLogon(string operatorId, string password)
         {
             var input = new StaffLogonInputDto();

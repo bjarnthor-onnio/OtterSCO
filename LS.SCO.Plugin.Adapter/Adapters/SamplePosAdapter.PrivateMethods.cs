@@ -19,47 +19,6 @@ namespace LS.SCO.Plugin.Adapter.Adapters
     /// </summary>
     public partial class SamplePosAdapter
     {
-        /// <summary>
-        /// Fills an object
-        /// </summary>
-        /// <param name="service"></param>
-        /// <returns></returns>
-        private BaseAdapterConfiguration FillAdapterConfiguration(ScoDeviceDto service, TerminalSettings settings, string staffId = "")
-        {
-            var device = new BaseAdapterConfiguration();
-
-            foreach (var property in device.GetType().GetProperties())
-            {
-                if (property.PropertyType == typeof(string))
-                    property.SetValue(device, service?.FeatureFlags?.GetFeatureFlagValueByName(property.Name));
-
-                if (property.PropertyType == typeof(int))
-                    property.SetValue(device, int.TryParse(service?.FeatureFlags?.GetFeatureFlagValueByName(property.Name) ?? "0", out int number) ? number : number);
-            }
-
-            device.TerminalId = service.TerminalId; //device
-            device.StaffId = staffId; //from get terminal settings
-            device.StoreId = settings.StoreId; //config file
-            device.Token = settings.Token; //config file
-
-            return device;
-        }
-
-        /// <summary>
-        /// Checks if the configurations were properly filled
-        /// </summary>
-        /// <exception cref="Exception"></exception>
-        private void ValidateConfigurations()
-        {
-            if (this.AdapterConfiguration.IsNullOrEmpty())
-            {
-                string message = $"Configuration file Missing: AppSetting.{{{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")}}}.json";
-
-                this._logManager.LogError(message);
-
-                throw new Exception(message);
-            }
-        }
 
         /// <summary>
         /// Creates SetCardEntryInputDto
@@ -112,13 +71,13 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         private async Task<AddToTransOutputDto> AddPaymentLineToTransaction(string tenderType, EFTRequestInputDto input)
         {
             var tenderInput = this._mapper.Map<EFTRequestInputDto, AddToTransInputDto>(input);
-            tenderInput.Data.ForceFinalPrice = true;
+            
             tenderInput.Data ??= new AddToTransInputDataDto();
             tenderInput.Data.Code = tenderType;
 
             tenderInput.CopyBaseIdentification(input);
             
-            var tenderOutput =  _posService.AddTenderAsync(tenderInput).Result;
+            var tenderOutput =  _posService.AddTenderAsync(tenderInput, input.AmountBreakdown.TotalAmount).Result;
 
             return tenderOutput;
         }

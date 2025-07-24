@@ -47,7 +47,7 @@ namespace LS.SCO.Plugin.Adapter.Controllers
         [HttpPost("payForCurrentTransactionExternal")]
         public async ValueTask<IActionResult> PayForCurrentTransactionExternal([FromBody] PayForCurrentTransactionInput input)
         {
-            var result = await this._samplePosAdapter.PayForCurrentTransactionExternal(input.TenderType);
+            var result = await this._samplePosAdapter.PayForCurrentTransactionExternal(input.TenderType, 0);
 
             return this.ValidateResult(result);
         }
