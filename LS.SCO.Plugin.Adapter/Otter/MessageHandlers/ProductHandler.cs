@@ -242,9 +242,9 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 product.id = _otterState.Api_MessageId_Product;
                 _otterProtocolHandler.SendMessage(product);
 
-                if (saleItem.HasLineDiscount || saleItem.HasPeriodicDiscount || saleItem.PriceReductions.Count > 0)
+                if (saleItem.HasLineDiscount || saleItem.HasPeriodicDiscount || saleItem.PriceReductions.Count  > 0 || saleItem.PeriodicDiscountDescription != null)
                 {
-                    var discountItems = addItem.Transaction.SaleItems.Where(x => (x.HasLineDiscount || x.HasPeriodicDiscount || x.PriceReductions.Count > 0) && x.LineNr != saleItem.LineNr);
+                    var discountItems = addItem.Transaction.SaleItems.Where(x => (x.HasLineDiscount || x.HasPeriodicDiscount || x.PriceReductions.Count > 0|| x.PeriodicDiscountDescription != null) && x.LineNr != saleItem.LineNr);
                     foreach (var item in discountItems)
                     {
                         var addProduct = ProductHelper.PopulateAddProduct(item);

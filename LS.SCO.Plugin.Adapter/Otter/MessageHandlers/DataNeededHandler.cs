@@ -260,8 +260,9 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                                 },
                                 id = _otterState.Api_MessageId
                             });
-                            var calculatedBasket = _adapter.CalculateTotals().Result;
-                            _otterState.Pos_BalanceAmount = calculatedBasket.Transaction.RemainingAmount;
+
+                            var calculatedBasket = _adapter.GetCurrentTransaction().Result;
+                            _otterState.Pos_BalanceAmount = calculatedBasket.Transaction.BalanceAmountWithTax;
                             _otterEventsManager.sendTotals((int)_otterState.Pos_BalanceAmount, (int)_otterState.Pos_TotalAmount);
                             _otterState.Api_MessageId = null;
                             _otterState.Api_Active_Payment_Method = null;

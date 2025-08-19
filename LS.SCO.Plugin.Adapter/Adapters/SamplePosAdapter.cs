@@ -239,13 +239,14 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         }
         public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, decimal? amount, string customerId = "", bool skipPaymentLine = true)
         {
+            //Dont need this here but we need to get the current transaction to get the receiptId, have to figure out a better way to do this
             GetCurrentTransactionOutputDto currentTransaction = await GetCurrentTransaction();
 
 
             PaymentRequestDto request = new PaymentRequestDto
             {
                 CurrencyCode = "ISK",
-                Amount = Convert.ToInt16(amount),
+                Amount = Convert.ToInt32(amount),
                 Reference = "Vörur",
                 CustomerId = customerId,
                 ReceiptId = currentTransaction.Transaction.ReceiptId,
