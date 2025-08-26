@@ -34,7 +34,7 @@ namespace Onnio.PaymentService.Services
                 switch (request.paymentService)
                 {
                     case PaymentServiceType.Netgiro:
-                        return await NetgiroPaymentService.ProcessPaymentAsync(request);
+                        return await NetgiroPaymentService.ProcessCartAsync(request);
 
                     case PaymentServiceType.Pei:
                         return await PeiPaymentService.ProcessPaymentAsync(request);
@@ -45,6 +45,24 @@ namespace Onnio.PaymentService.Services
 
                     default:
                         return new PaymentResultDto { Message = "Payment method not supported", Success = false };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new PaymentResultDto { Success = false, Message = ex.Message };
+            }
+        }
+        public async Task<object> ProcessCancellationAsync(CancellationRequestDto request)
+        {
+            try
+            {
+                switch (request.paymentService)
+                {
+                    case PaymentServiceType.Netgiro:
+                        return await NetgiroPaymentService.CancelCartAsync(request.TransactionId);
+                   
+                    default:
+                        return new PaymentResultDto { Message = "Cancellation method not supported", Success = false };
                 }
             }
             catch (Exception ex)

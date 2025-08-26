@@ -14,23 +14,62 @@ using Onnio.PaymentService.Interfaces;
 using Onnio.PaymentService.Models;
 using Onnio.PaymentService.Models.Netgiro;
 
+
+using Microsoft.Extensions.Logging;
+
 namespace Onnio.PaymentService.Services
 {
     public class NetgiroPaymentService : INetgiroPaymentService
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfigurationService _configurationService;
+        private readonly ILogger _logger;
         public NetgiroPaymentService(IHttpClientFactory httpClientFactory, IConfigurationService configurationService)
         {
             _configurationService = configurationService;
             _httpClientFactory = httpClientFactory;
         }
 
-        public PaymentResultDto ProcessPayment(int amount, string receiptId, string ssn)
+        public async Task<PaymentResultDto> ProcessCartAsync(PaymentRequestDto request)
         {
-            return new PaymentResultDto();
+            if (!String.IsNullOrEmpty(request.ConfirmationCode))
+            {
+                return await ConfirmCartAsync(request.CustomerId, request.ConfirmationCode);
+            }
+            else
+            {
+                return await ProcessPaymentAsync(request);
+            }
         }
-
+        public async Task<PaymentResultDto> ConfirmCartAsync(string transactionId, string confirmationCode)
+        {
+            try
+            {
+                ConfirmCartRequest request = new ConfirmCartRequest
+                {
+                    TransactionId = transactionId,
+                    Identifier = confirmationCode
+                };
+                //Call the Netgiro API
+                var response = await MakeApiCallAsync("ConfirmCart", request);
+                //Parse the response
+                CheckCartResult? result = JsonConvert.DeserializeObject<CheckCartResult>(response.Content.ReadAsStringAsync().Result, jsonSettings);
+                if (!result.Success || !response.IsSuccessStatusCode)
+                {
+                    return new PaymentResultDto { Success = false, Message = result.Message };
+                }
+                return new PaymentResultDto
+                {
+                    Success = true,
+                    Message = "Payment confirmed successfully",
+                    PaymentAuthorization = result.PaymentInfo.InvoiceNumber.ToString()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new PaymentResultDto { Success = false, Message = ex.Message };
+            }
+        }
         public async Task<PaymentResultDto> ProcessPaymentAsync(PaymentRequestDto paymentRequest)
         {
             try
@@ -68,8 +107,24 @@ namespace Onnio.PaymentService.Services
                     //Call the Netgiro API
                     response = await MakeApiCallAsync("CheckCart", checkCartRequest);
                     checkCartResult = JsonConvert.DeserializeObject<CheckCartResult>(response.Content.ReadAsStringAsync().Result, jsonSettings);
+                    if (checkCartResult.ResultCode == NetgiroConstants.AdditionalConfirmationNeeded)
+                    {
+                        return new PaymentResultDto
+                        {
+                            Success = false,
+                            Message = "Staðfesta þarf færslu með kóða.",
+                            PaymentReference = result.TransactionId,
+                            ConfirmationNeeded = true,
 
-                    if (checkCartResult.PaymentSuccessful)
+
+                        };
+                    }
+                    else if (checkCartResult.ResultCode == NetgiroConstants.CartNotFound)
+                    {
+                        return new PaymentResultDto { Success = false, Message = "Karfan fannst ekki" };
+                    }
+                    
+                    else if (checkCartResult.PaymentSuccessful)
                     {
                         return new PaymentResultDto
                         {
@@ -98,7 +153,27 @@ namespace Onnio.PaymentService.Services
             }
 
         }
-
+        public async Task<PaymentResultDto> CancelCartAsync(string transactionId)
+        {
+            try
+            {
+                CheckCartResult? checkCartResult = null;
+                //Call the Netgiro API
+                var response = await MakeApiCallAsync("CancelCart", transactionId);
+                //Parse the response
+                checkCartResult = JsonConvert.DeserializeObject<CheckCartResult>(response.Content.ReadAsStringAsync().Result, jsonSettings);
+                
+                return new PaymentResultDto
+                {
+                    Success = true,
+                    Message = "Cart cancelled successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new PaymentResultDto { Success = false, Message = ex.Message };
+            }
+        }
 
         private async Task<HttpResponseMessage> MakeApiCallAsync(string endpoint, object payload)
         {

@@ -5,7 +5,9 @@ namespace Onnio.PaymentService.Interfaces
 {
     public interface INetgiroPaymentService
     {
+        Task<PaymentResultDto>ProcessCartAsync(PaymentRequestDto request);
         Task<PaymentResultDto> ProcessPaymentAsync(PaymentRequestDto request);
-        PaymentResultDto ProcessPayment(int amount, string receiptId, string ssn);
+        Task<PaymentResultDto> ConfirmCartAsync(string transactionId, string confirmationCode);
+        Task<PaymentResultDto> CancelCartAsync(string transactionId);
     }
 }

@@ -9,6 +9,8 @@ using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
 using LS.SCO.Plugin.Service.Interfaces;
+using Onnio.ConfigService.Interface;
+using Onnio.ConfigService.Models;
 
 namespace LS.SCO.Plugin.Adapter.Otter
 {
@@ -18,13 +20,14 @@ namespace LS.SCO.Plugin.Adapter.Otter
         private readonly ILogManager _logManager;
         protected OtterProtocolHandler _otterProtocolHandler;
         protected OtterState _otterState;
-
-        public OtterEventsManager(ILogManager logService, ILogManager logManager, OtterState otterState, OtterProtocolHandler otterProtocolHandler)
+        private readonly IConfigurationService _configService;
+        public OtterEventsManager(ILogManager logService, ILogManager logManager, OtterState otterState, OtterProtocolHandler otterProtocolHandler, IConfigurationService service)
         {
             _logService = logService;
             _logManager = logManager;
             _otterState = otterState;
             _otterProtocolHandler = otterProtocolHandler;
+            _configService = service;
 
         }
 
@@ -46,12 +49,13 @@ namespace LS.SCO.Plugin.Adapter.Otter
 
         public void sendTransactionFinish()
         {
+            var otterConfig = _configService.GetConfigurationAsync<OtterConfig>("Config", "OtterConfig").Result;
             _otterProtocolHandler.SendMessage(new Otter.Models.FromPOS.transactionFinish
             {
                 @params = new transactionFinishParams
                 {
                     transactionId = _otterState.Pos_TransactionId,
-                    askForReceipt = true
+                    askForReceipt = otterConfig.AskForReceipt,
                     //TODO - Set this as a config
                 },
                 id = Guid.NewGuid().ToString()

@@ -58,7 +58,12 @@ namespace LS.SCO.Plugin.Service.Services
             var response  = _onnioPaymentService.ProcessPaymentAsync(request).Result as PaymentResultDto;
             return response;
         }
+        public void CancelExternalPayment(CancellationRequestDto request)
+        {
 
+            var response = _onnioPaymentService.ProcessCancellationAsync(request);
+            
+        }
         public bool TriggerLobicoEvent(string receiptId)
         {
             return _onnioPaymentService.AppPaymentService.TriggerAppPaymentStateChangeAsync(receiptId).Result;

@@ -29,7 +29,7 @@ namespace LS.SCO.Plugin.Adapter.Interfaces
         Task<StartTransactionOutputDto> StartTransactionAsync();
         Task<AddToTransOutputDto> AddToTransaction(AddToTransInputDto input);
         Task<GetCurrentTransactionOutputDto> GetCurrentTransaction();
-        Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, decimal? amount, string customerId = "", bool skipPaymentLine = true);
+        Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, decimal? amount, string customerId = "", bool skipPaymentLine = true, string confirmationCode = "");
         Task<BaseOutputEntity> PayForCurrentTransaction(decimal amount, string tenderType);
         Task<FinishTransactionOutputDto> FinishTransactionAsync();
         Task<VoidTransactionOutputDto> VoidTransactionAsync();

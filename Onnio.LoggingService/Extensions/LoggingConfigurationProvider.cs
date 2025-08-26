@@ -24,7 +24,7 @@ namespace Onnio.LoggingService.Extensions
                 try
                 {
                     // Create configuration from the dedicated file
-                   /* var config = new ConfigurationBuilder()
+                    /*var config = new ConfigurationBuilder()
                         .AddJsonFile(configFilePath, optional: false, reloadOnChange: true)
                         .Build();
 

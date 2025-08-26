@@ -6,5 +6,7 @@
         public string Message { get; set; } = String.Empty;
         public string PaymentId { get; set; } = String.Empty;
         public string PaymentAuthorization { get; set; } = String.Empty;
+        public string PaymentReference { get; set; } = String.Empty;
+        public bool ConfirmationNeeded { get; set; } = false;
     }
 }

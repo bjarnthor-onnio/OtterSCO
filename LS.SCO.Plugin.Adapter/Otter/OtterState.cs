@@ -35,6 +35,9 @@ namespace LS.SCO.Plugin.Adapter.Otter
         public bool App_PaymentTendered { get; set; } = false;
         public string Api_DataNeededType { get; set; }
         public bool Pos_VisuallyVerify { get; set; } = false;
+        public string External_PaymentTransactionId { get; set; } = null;
+        public int External_PaymentAuthenticationType { get; set; } = 0; 
+
         public void Reset()
         {
             State = StatesEnum.Idle;
@@ -44,6 +47,8 @@ namespace LS.SCO.Plugin.Adapter.Otter
             Api_Active_Payment_Method = "";
             App_PaymentTendered = false;
             Api_DataNeededType = null;
+            External_PaymentTransactionId = null;
+            External_PaymentAuthenticationType = 0;
         }
     }
 }

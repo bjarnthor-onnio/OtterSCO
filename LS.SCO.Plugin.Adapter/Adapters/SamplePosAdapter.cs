@@ -35,6 +35,7 @@ using Onnio.ConfigService.Interface;
 using LS.SCO.Entity.DTO.SCOService.PrintPreviousTransaction;
 using LS.SCO.Entity.DTO.SCOService.CalculateBasket;
 using LS.SCO.Plugin.Adapter.Interfaces;
+using Onnio.ConfigService.Models;
 
 namespace LS.SCO.Plugin.Adapter.Adapters
 {
@@ -237,7 +238,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             return result;
         }
-        public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, decimal? amount, string customerId = "", bool skipPaymentLine = true)
+        public async Task<AddToTransOutputDto> PayForCurrentTransactionExternal(string tenderType, decimal? amount, string customerId = "", bool skipPaymentLine = true, string confirmationCode = "")
         {
             //Dont need this here but we need to get the current transaction to get the receiptId, have to figure out a better way to do this
             GetCurrentTransactionOutputDto currentTransaction = await GetCurrentTransaction();
@@ -255,7 +256,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             };
 
             //TODO: handle different payment services better
-            //Create a swithc case for the different payment services
+            //Maybe create a swithc case for the different payment services
             
             if (tenderType == "23")
             {
@@ -268,6 +269,8 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             if(tenderType == "18"|| tenderType.ToLower().Contains("netgiro"))
             {
                 request.paymentService = PaymentServiceType.Netgiro;
+                request.ConfirmationCode = confirmationCode;
+                request.CustomerId = customerId;
             }
             if(tenderType == "22")
             {
@@ -289,7 +292,16 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                 errorEnumerable.Add(error);
 
                 output.ErrorList = errorEnumerable;
+                
+                if (result.ConfirmationNeeded)
+                {
+                    _otterState.External_PaymentTransactionId = result.PaymentReference;
+                    _otterState.External_PaymentAuthenticationType = (int)PaymentAuthenticationType.Code;
+                    
+                }
+
                 return output;
+
             }
 
 
@@ -299,7 +311,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
                 {
                     AmountBreakdown = new Entity.Model.HardwareStation.AmountBreakdown
                     {
-                        TotalAmount = Convert.ToInt16(amount)
+                        TotalAmount = Convert.ToInt32(amount)
                     },
                     TenderType = tenderType
                 };
@@ -319,6 +331,22 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             output.Success = true;
             return output;
 
+        }
+        public async void CancelExternalPayment(string tenderType)
+        {
+            if (!string.IsNullOrEmpty(_otterState.External_PaymentTransactionId))
+            {
+
+                CancellationRequestDto request = new CancellationRequestDto();
+                if (tenderType == "18" || tenderType.ToLower().Contains("netgiro"))
+                {
+                    request.paymentService = PaymentServiceType.Netgiro;
+                    request.TransactionId = _otterState.External_PaymentTransactionId;
+                }
+
+                _posService.CancelExternalPayment(request);
+                _otterState.External_PaymentTransactionId = string.Empty;
+            }
         }
 
         /// <summary>
@@ -447,6 +475,13 @@ namespace LS.SCO.Plugin.Adapter.Adapters
 
             if (result.IsValid())
             {
+                var otterConfig = _configService.GetConfigurationAsync<OtterConfig>("Config", "OtterConfig").Result;
+                
+                if(!otterConfig.AskForReceipt && otterConfig.ForceReceiptPrinting)
+                {
+                    this.PrintPreviousTrans("0");
+                }
+
                 _logService.MethodEndsWithSuccess();
             }
             else

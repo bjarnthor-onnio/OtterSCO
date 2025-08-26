@@ -7,10 +7,11 @@ namespace Onnio.PaymentService.Models
         [JsonIgnore]
         public PaymentServiceType paymentService { get; set; }
         public int Amount { get; set; }
-        public string Reference { get; set; } = "";
-        public string CustomerId { get; set; } = "";
-        public string TenderTypeId { get; set; } = "";
+        public string Reference { get; set; } = string.Empty;
+        public string CustomerId { get; set; } = string.Empty;
+        public string TenderTypeId { get; set; } = string.Empty;
         public string CurrencyCode { get; set; } = "ISK";
-        public string ReceiptId { get; set; }
+        public string ReceiptId { get; set; } = string.Empty;
+        public string ConfirmationCode { get; set; } = string.Empty;
     }
 }

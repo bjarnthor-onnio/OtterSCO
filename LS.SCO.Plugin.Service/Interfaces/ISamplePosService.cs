@@ -9,6 +9,7 @@ namespace LS.SCO.Plugin.Service.Interfaces
     public interface ISamplePosService : IBaseSCOService
     {
         public PaymentResultDto ProcessExternalPayment(PaymentRequestDto request);
+        public void CancelExternalPayment(CancellationRequestDto request);
         public bool TriggerLobicoEvent(string transactionId);
     }
 }

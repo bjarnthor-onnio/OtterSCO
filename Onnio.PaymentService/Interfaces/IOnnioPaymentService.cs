@@ -15,5 +15,6 @@ namespace Onnio.PaymentService.Interfaces
         public ILeikbreytirPaymentService LeikbreytirPaymentService { get; }
 
         Task<object> ProcessPaymentAsync(PaymentRequestDto request);
+        Task<object> ProcessCancellationAsync(CancellationRequestDto request);
     }
 }

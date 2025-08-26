@@ -1,8 +1,14 @@
 ﻿using LS.SCO.Entity.DTO.DieboldNixdorf.Pos;
+using LS.SCO.Entity.DTO.SCOService.AddToTransaction;
+using LS.SCO.Helpers.Extensions;
 using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Adapters.Extensions;
 using LS.SCO.Plugin.Adapter.Otter.Models;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Onnio.PaymentService.Models;
+
+
 //using LS.SCO.Plugin.Adapter.Otter.Models.FromSCO;
 using WSSCOMobilePosPrint;
 using static System.Net.Mime.MediaTypeNames;
@@ -71,6 +77,13 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
             if (msg.result.back && _otterState.Api_Active_Payment_Method is not null)
             {
+                if(_otterState.Api_Active_Payment_Method == "Netgiro_TT" && _otterState.External_PaymentAuthenticationType == (int)PaymentAuthenticationType.Code)
+                {
+                    _adapter.CancelExternalPayment(_otterState.External_PaymentTransactionId);
+                    _otterState.External_PaymentAuthenticationType = 0;
+                    _otterState.External_PaymentTransactionId = null;
+                }
+
                 payment goPayment = new payment();
                 goPayment.id = _otterState.Api_MessageId;
                 goPayment.result = new paymentResult();
@@ -87,27 +100,58 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params.clearScreen = true;
                 dataNeeded.id = _otterState.Api_MessageId_Payment;
                 _otterProtocolHandler.SendMessage(dataNeeded);
+                AddToTransOutputDto result = null;
 
-                var result = _adapter.PayForCurrentTransactionExternal("Netgiro_TT", _otterState.Pos_BalanceAmount,msg.result.data.Replace("-", ""), false).Result;
+                if (_otterState.External_PaymentAuthenticationType == (int)PaymentAuthenticationType.Code)
+                {
+                    result = _adapter.PayForCurrentTransactionExternal("Netgiro_TT", _otterState.Pos_BalanceAmount,_otterState.External_PaymentTransactionId , false, msg.result.data).Result;
+                }
+                else
+                {
+                    result = _adapter.PayForCurrentTransactionExternal("Netgiro_TT", _otterState.Pos_BalanceAmount, msg.result.data.Replace("-", ""), false).Result;
+                }
 
                 if (result.ErrorList.Count() > 0)
                 {
-                    dataNeeded.@params = new dataNeededParams();
-                    dataNeeded.@params.operatorMode = false;
-                    dataNeeded.@params.titleText = "Netgiro";
-                    dataNeeded.@params.keyPad = true;
-                    dataNeeded.@params.deviceError = false;
-                    dataNeeded.@params.keyPadInputMask = 4;
-                    dataNeeded.@params.keyPadPattern = "######-####";
-                    dataNeeded.@params.minimalInputLength = 10;
-                    dataNeeded.@params.exitButton = 1;
-                    dataNeeded.@params.scannerEnabled = true;
-                    dataNeeded.@params.instructionsText = result.ErrorList.First().ErrorMessage;
-                    dataNeeded.error = result.ErrorList.First().ErrorMessage;
-                    dataNeeded.id = _otterState.Api_MessageId_Payment;
-                    _otterProtocolHandler.SendMessage(dataNeeded);
+                    //TODO: Skítamix þarf að laga
+                    if (_otterState.External_PaymentAuthenticationType == (int)PaymentAuthenticationType.Code)
+                    {
+                        dataNeeded.@params = new dataNeededParams();
+                        dataNeeded.@params.operatorMode = false;
+                        dataNeeded.@params.titleText = "Netgiro";
+                        dataNeeded.@params.keyPad = true;
+                        dataNeeded.@params.deviceError = false;
+                        dataNeeded.@params.keyPadInputMask = 4;
+                        dataNeeded.@params.keyPadPattern = "####";
+                        dataNeeded.@params.minimalInputLength = 4;
+                        dataNeeded.@params.exitButton = 1;
+                        dataNeeded.@params.scannerEnabled = true;
+                        dataNeeded.@params.instructionsText = result.ErrorList.First().ErrorMessage;
+                        dataNeeded.id = _otterState.Api_MessageId_Payment;
 
+                        _otterState.External_PaymentAuthenticationType = (int)PaymentAuthenticationType.Code;
+                        _otterProtocolHandler.SendMessage(dataNeeded);
+                    }
+                    else
+                    {
+                        dataNeeded.@params = new dataNeededParams();
+                        dataNeeded.@params.operatorMode = false;
+                        dataNeeded.@params.titleText = "Netgiro";
+                        dataNeeded.@params.keyPad = true;
+                        dataNeeded.@params.deviceError = false;
+                        dataNeeded.@params.keyPadInputMask = 4;
+                        dataNeeded.@params.keyPadPattern = "######-####";
+                        dataNeeded.@params.minimalInputLength = 10;
+                        dataNeeded.@params.exitButton = 1;
+                        dataNeeded.@params.scannerEnabled = true;
+                        dataNeeded.@params.instructionsText = result.ErrorList.First().ErrorMessage;
+                        dataNeeded.error = result.ErrorList.First().ErrorMessage;
+                        dataNeeded.id = _otterState.Api_MessageId_Payment;
+                        _otterProtocolHandler.SendMessage(dataNeeded);
+                    }
                     return;
+
+                    
                 }
                 foundPaymentMethod = true;
                 dataNeeded.@params.clearScreen = true;
@@ -295,7 +339,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                                 result = new paymentResult
                                 {
                                     successful = true,
-                                    amount = Convert.ToInt16(_otterState.Pos_BalanceAmount) * 100
+                                    amount = Convert.ToInt32(_otterState.Pos_BalanceAmount) * 100
                                 },
                                 id = _otterState.Api_MessageId
                             });

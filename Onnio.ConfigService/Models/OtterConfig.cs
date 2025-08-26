@@ -8,6 +8,8 @@ namespace Onnio.ConfigService.Models
 {
     public class OtterConfig
     {
-        public string PosId { get; set; }
+        public string PosId { get; set; } = string.Empty;
+        public bool AskForReceipt { get; set; } = true;
+        public bool ForceReceiptPrinting { get; set; } = true;
     }
 }

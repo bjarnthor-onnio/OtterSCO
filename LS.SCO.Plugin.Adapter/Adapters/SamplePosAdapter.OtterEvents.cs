@@ -30,7 +30,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
         {
             this._otterProtocolHandler = new OtterProtocolHandler(_logService, _logService,_configService);
             this._otterState = new OtterState();
-            this._manager = new OtterEventsManager(_logService, _logService, this._otterState, this._otterProtocolHandler);
+            this._manager = new OtterEventsManager(_logService, _logService, this._otterState, this._otterProtocolHandler, this._configService);
 
             _otterProtocolHandler.ConnectToSCO("127.0.0.1", 9000); //TODO - get from config or database
             _otterProtocolHandler.OnMessageReceived += OnScoMessageReceived;

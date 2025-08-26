@@ -2,6 +2,7 @@
 using LS.SCO.Plugin.Adapter.Adapters;
 using LS.SCO.Plugin.Adapter.Otter.Models;
 using LS.SCO.Plugin.Adapter.Otter.Models.FromPOS;
+using Onnio.PaymentService.Models;
 using Onnio.PaymentService.Services;
 
 namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
@@ -144,7 +145,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params = new dataNeededParams();
                 dataNeeded.@params.operatorMode = false;
                 dataNeeded.@params.titleText = "Netgíró";
-                dataNeeded.@params.instructionsText = "Sláðu/skannaðu inn appnúmer";
+                dataNeeded.@params.instructionsText = "Skannaðu inn strikamerki úr Netgíró appinu eða sláðu inn kennitölu / strikanúmer,";
                 dataNeeded.@params.keyPad = true;
                 dataNeeded.@params.deviceError = false;
                 dataNeeded.@params.keyPadInputMask = 4;
@@ -154,6 +155,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params.exitButton = 1;
 
                 dataNeeded.id = Guid.NewGuid().ToString();
+                _otterState.External_PaymentTransactionId = null;
+                _otterState.External_PaymentAuthenticationType = (int)PaymentAuthenticationType.None;
                 _otterState.Api_MessageId_Payment = dataNeeded.id;
                 _otterState.Api_Active_Payment_Method = msg.@params.type;
                 _otterProtocolHandler.SendMessage(dataNeeded);
