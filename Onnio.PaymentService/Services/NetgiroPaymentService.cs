@@ -23,7 +23,7 @@ namespace Onnio.PaymentService.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfigurationService _configurationService;
-        private readonly ILogger _logger;
+        
         public NetgiroPaymentService(IHttpClientFactory httpClientFactory, IConfigurationService configurationService)
         {
             _configurationService = configurationService;

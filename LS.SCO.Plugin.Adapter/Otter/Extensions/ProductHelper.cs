@@ -63,7 +63,6 @@ namespace LS.SCO.Plugin.Adapter.Otter.Extensions
             addProduct.@params.securityMode = "SkipBagging";
             addProduct.@params.productId = saleItem.LineNr;
             addProduct.@params.price = (int)saleItem.PriceWithTax * 100;
-            addProduct.@params.barcode = saleItem.Barcode;
             addProduct.@params.totalPrice = (int)((saleItem.NetAmount + saleItem.TaxAmount) * 100);
             addProduct.@params.discount = new List<Otter.Models.FromPOS.Discount_addProduct>();
             addProduct.@params.barcode = saleItem.Barcode;

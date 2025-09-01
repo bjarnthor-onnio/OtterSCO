@@ -145,7 +145,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 dataNeeded.@params = new dataNeededParams();
                 dataNeeded.@params.operatorMode = false;
                 dataNeeded.@params.titleText = "Netgíró";
-                dataNeeded.@params.instructionsText = "Skannaðu inn strikamerki úr Netgíró appinu eða sláðu inn kennitölu / strikanúmer,";
+                dataNeeded.@params.instructionsText = "Skannaðu inn strikamerki úr Netgíró appinu eða sláðu inn strikamerkisnúmer";
                 dataNeeded.@params.keyPad = true;
                 dataNeeded.@params.deviceError = false;
                 dataNeeded.@params.keyPadInputMask = 4;

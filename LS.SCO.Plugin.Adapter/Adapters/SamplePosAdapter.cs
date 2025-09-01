@@ -528,7 +528,7 @@ namespace LS.SCO.Plugin.Adapter.Adapters
             input.Data = new AddToTransInputDataDto();
             input.Data.LineNo = lineNo;
             input.Data.Id = itemCode;
-
+            
             var result = await _posService.VoidItemAsync(input);
             if (result.IsValid())
             {

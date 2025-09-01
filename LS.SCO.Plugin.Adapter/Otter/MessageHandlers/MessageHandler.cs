@@ -26,8 +26,6 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
         public abstract void Handle(object message);
 
-        // Factory method to get appropriate handler
-        
         public static MessageHandler GetHandler(object message, OtterState otterState, OtterProtocolHandler otterProtocolHandler, OtterEventsManager manager, SamplePosAdapter samplePosAdapter)
         {
             return message switch
@@ -44,6 +42,7 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
                 Otter.Models.FromSCO.goPayment => new GoPaymentHandler(otterState, otterProtocolHandler, manager, samplePosAdapter),
                 Otter.Models.FromSCO.shutdown => new ShutdownHandler(otterState, otterProtocolHandler, manager, samplePosAdapter),
                 Otter.Models.FromSCO.printLastReceipt => new PrintLastReceiptHandler(otterState, otterProtocolHandler, manager, samplePosAdapter),
+                Otter.Models.FromSCO.changeProductQuantity => new ChangeProductQuantityHandler(otterState, otterProtocolHandler, manager, samplePosAdapter),
 
                 _ => new DefaultHandler(otterState, otterProtocolHandler, manager,samplePosAdapter)
             };
