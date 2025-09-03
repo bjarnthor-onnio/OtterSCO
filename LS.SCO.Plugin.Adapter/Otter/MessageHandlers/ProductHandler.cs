@@ -253,8 +253,8 @@ namespace LS.SCO.Plugin.Adapter.Otter.MessageHandlers
 
                     }
                 }
-                int remainingAmount = addItem.Transaction.RemainingAmount != 0 ? (int)(addItem.Transaction.RemainingAmount) : (int)(addItem.Transaction.BalanceAmountWithTax);
-                _otterEventsManager.sendTotals(remainingAmount, addItem.Transaction.NetAmountWithTax);
+                //int remainingAmount = addItem.Transaction.RemainingAmount != 0 ? (int)(addItem.Transaction.RemainingAmount) : (int)(addItem.Transaction.BalanceAmountWithTax);
+                _otterEventsManager.sendTotals(addItem.Transaction.BalanceAmountWithTax, addItem.Transaction.NetAmountWithTax);
                 _otterState.Pos_VisuallyVerify = false;
             }
         }
