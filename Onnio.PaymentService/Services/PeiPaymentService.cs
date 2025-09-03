@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Onnio.ConfigService.Interface;
 using Onnio.ConfigService.Models;
@@ -18,10 +19,12 @@ namespace Onnio.PaymentService.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfigurationService _configurationService;
-        public PeiPaymentService(IHttpClientFactory httpClientFactory, IConfigurationService configurationService)
+        private readonly ILogger<PeiPaymentService> _logger;
+        public PeiPaymentService(IHttpClientFactory httpClientFactory, IConfigurationService configurationService, ILogger<PeiPaymentService> logger)
         {
             _configurationService = configurationService;
             _httpClientFactory = httpClientFactory;
+            _logger = logger;
         }
         public PeiPaymentResult ProcessPayment()
         {
@@ -43,14 +46,25 @@ namespace Onnio.PaymentService.Services
 
             var json = JsonConvert.SerializeObject(peiPaymentRequest, jsonSettings);
             // Call the App payment service
-            var response = MakeApiCallAsync(json, "/SCOPaymentRequests").Result;
+            var (success, stringResponse) = MakeApiCallAsync(json, "/SCOPaymentRequests").Result;
+
+            _logger.LogInformation("SCOPayment returned from BC {paymentResponse}", stringResponse);
 
             // Parse the response
-            PaymentResultDto? result = MapResponse(JsonConvert.DeserializeObject<AppPaymentResultDto>(response, jsonSettings));
+            PaymentResultDto? result = MapResponse(JsonConvert.DeserializeObject<AppPaymentResultDto>(stringResponse, jsonSettings));
+            if (!success)
+            {
+                result = new PaymentResultDto
+                {
+                    Success = false,
+                    Message = "An error occurred handling Pei payment"
+                };
+            }
+            
 
             return result;
         }
-        private async Task<string> MakeApiCallAsync(string json, string endpoint)
+        private async Task<Tuple<bool, string>> MakeApiCallAsync(string json, string endpoint)
         {
 
             // Make an API call to the App payment service
@@ -68,7 +82,7 @@ namespace Onnio.PaymentService.Services
             var response = await client.SendAsync(request);
 
             var responseContent = await response.Content.ReadAsStringAsync();
-            return responseContent;
+            return new Tuple<bool, string>(response.IsSuccessStatusCode, responseContent);
 
 
         }
